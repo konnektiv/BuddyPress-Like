@@ -1,5 +1,5 @@
 === BuddyPress Like ===
-Contributors: darrenmeehan
+Contributors: darrenmeehan, cherbst
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAJLLEJDBHAWL
 Tags: buddypress, like, rate, thumbs, post, button, vote
 Requires at least: WordPress 3.8, BuddyPress 1.5
