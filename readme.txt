@@ -10,6 +10,14 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Gives users the ability to 'like' content across your BuddyPress enabled site.
 
+== Information about this fork ==
+
+This fork adds the following new features:
+
+* Store total like count for posts into post meta for orderby
+* Support Like button on bbPress Topics & Replies
+* Save likes in a seperate table
+
 == Description ==
 
 Gives users the ability to 'like' content across your BuddyPress enabled site.
