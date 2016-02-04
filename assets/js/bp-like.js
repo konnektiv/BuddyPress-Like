@@ -9,6 +9,7 @@ jq(document).ready(function bpLike() {
         id = jq(this).attr('id');                           // Used to get the id of the entity liked or unliked
 
         type = jq(this).attr('class')                           //
+            .replace('toggle ','')
             .replace('bp-primary-action ','')                   // end space needed to avoid double space in var type
             .replace('button', 'activity_update')               // clearer variable naming
             .replace('acomment-reply', 'activity_comment')
@@ -57,6 +58,7 @@ jq(document).ready(function bpLike() {
                     getLikes(id, type);
 
                 // Nobody else liked this, so clear who likes the item
+                // TODO: make this work with different text/templates
                 if ( data == 'Like <span>0</span>' ) {
                     jq('#users-who-like-' + getItemId(id) ).empty();
                 }
