@@ -1,0 +1,11 @@
+a.unlike.toggle span.unlike-text {
+    display: none;
+}
+
+a.unlike.toggle:hover span.unlike-text {
+    display: inherit;
+}
+
+a.unlike:hover span.like-text {
+    display: none;
+}

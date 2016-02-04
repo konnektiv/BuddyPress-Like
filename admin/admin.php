@@ -67,7 +67,8 @@ function bp_like_admin_page() {
             'name_or_avatar'           => $_POST['name_or_avatar'],
             'remove_fav_button'        => $_POST['bp_like_remove_fav_button'],
             'enable_blog_post_support' => $_POST['enable_blog_post_support'],
-            'bp_like_post_types' => $_POST['bp_like_post_types']
+            'bp_like_post_types'       => $_POST['bp_like_post_types'],
+            'bp_like_toggle_button'    => $_POST['bp_like_toggle_button'],
             )
         );
 
@@ -149,6 +150,22 @@ function bp_like_admin_page() {
                                 <?php _e( "Remove the BuddyPress favorite button from activity." , 'buddypress-like' ); ?>
                             </label>
                             <p class="description"><?php echo __( " Currently only uses jQuery to remove the buttons." , "buddypress-like" ); ?></p>
+                            <br />
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><?php _e( 'Toggle button' , 'buddypress-like' ); ?></th>
+                    <td>
+                        <fieldset>
+                            <legend class="screen-reader-text">
+                                <span><?php _e( 'Toggle Like Button' , 'buddypress-like' ); ?></span>
+                            </legend>
+                            <input type="checkbox" id="bp_like_toggle_button" name="bp_like_toggle_button" value="1" <?php if ( bp_like_get_settings( 'bp_like_toggle_button' ) == 1 ) { echo ' checked="checked" '; } ?>>
+                            <label for="bp_like_toggle_button">
+                                <?php _e( "Toggle like/unlike button text on mouse over." , 'buddypress-like' ); ?>
+                            </label>
+                            <p class="description"><?php echo __( "Instead of showing the 'unlike' text when a user has liked an item, show the 'like' text and toggle to the 'unlike' text on mouse over." , "buddypress-like" ); ?></p>
                             <br />
                         </fieldset>
                     </td>

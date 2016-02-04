@@ -177,6 +177,12 @@ function bp_like_install() {
         $remove_fav_button = '0';
     }
 
+    if ( $current_settings['bp_like_toggle_button']) {
+        $toggle_button = $current_settings['bp_like_toggle_button'];
+    } else {
+        $toggle_button = '0';
+    }
+
     if ( $current_settings['bp_like_post_types']) {
         $bp_like_post_types = $current_settings['bp_like_post_types'];
     } else {
@@ -209,6 +215,7 @@ function bp_like_install() {
         'text_strings'             => $text_strings,
         'name_or_avatar'           => $name_or_avatar,
         'remove_fav_button'        => $remove_fav_button,
+        'bp_like_toggle_button'    => $toggle_button,
         'bp_like_post_types'       => $bp_like_post_types,
         'enable_notifications'     => $enable_notifications
     );

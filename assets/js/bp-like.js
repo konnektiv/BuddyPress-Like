@@ -66,9 +66,10 @@ jq(document).ready(function bpLike() {
                 .replace( 'like', '' )
                 .trim();
                 // Show who likes the item if user is first to like
-                if (data == 'Unlike <span>1</span>') {
+                // TODO: make this work with different text/templates
+                /*if (data == 'Unlike <span>1</span>') {
                     jq('#users-who-like-' + getItemId(id)).html('<small>' + bplikeTerms.you_like_this +'</small>');
-                }
+                }*/
 
             });
 

@@ -25,6 +25,8 @@ function bp_like_enqueue_scripts() {
                 'fav_remove'     => bp_like_get_settings( 'remove_fav_button' ) == 1 ? '1' : '0'
             )
         );
+
+        wp_enqueue_style( 'bplike_css', plugins_url( '/assets/css/bplike.css', dirname( __FILE__ ) ));
     }
 }
 add_action( 'wp_enqueue_scripts' , 'bp_like_enqueue_scripts' );
