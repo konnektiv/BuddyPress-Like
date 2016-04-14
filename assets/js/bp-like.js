@@ -1,10 +1,14 @@
 /* jshint undef: false, unused:false */
 // AJAX Functions
 var jq = jQuery;
-var id, type;
+var id, type, curXhr;
 jq(document).ready(function bpLike() {
     "use strict";
     jq('.like, .unlike').live('click', function() {
+
+        if (curXhr) {
+          return false;
+        }
 
         id = jq(this).attr('id');                           // Used to get the id of the entity liked or unliked
 
@@ -26,7 +30,7 @@ jq(document).ready(function bpLike() {
 
         jq(this).addClass('loading');
 
-        jq.post(ajaxurl, {
+        curXhr = jq.post(ajaxurl, {
             action: 'activity_like',
             'type': type,
             'method': method,
@@ -72,7 +76,7 @@ jq(document).ready(function bpLike() {
                 /*if (data == 'Unlike <span>1</span>') {
                     jq('#users-who-like-' + getItemId(id)).html('<small>' + bplikeTerms.you_like_this +'</small>');
                 }*/
-
+                curXhr = false;
             });
 
         return false;

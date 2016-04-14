@@ -41,6 +41,9 @@ function bp_like_add_user_like( $item_id, $type ) {
         return false;
     }
 
+    if ( BPLIKE_LIKES::get_user_like($item_id, $type, $user_id) )
+        return false;
+
 	$like = new BPLIKE_LIKES();
 	$like->liker_id = $user_id;
 	$like->item_id = $item_id;

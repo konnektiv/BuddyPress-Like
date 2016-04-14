@@ -195,6 +195,6 @@ class BPLIKE_LIKES {
 	public static function get_likers($item_id, $type) {
 		global $wpdb, $bp;
 
-		return $wpdb->get_col( $wpdb->prepare( "SELECT liker_id FROM {$bp->likes->table_name} WHERE item_id = %d AND like_type = %s", $item_id, $type ) );
+		return $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT liker_id FROM {$bp->likes->table_name} WHERE item_id = %d AND like_type = %s", $item_id, $type ) );
 	}
 }
