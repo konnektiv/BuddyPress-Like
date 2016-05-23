@@ -278,7 +278,7 @@ function bp_like_admin_page() {
                         <th colspan="2" id="default" class="column-name"></th>
                     </tr>
                 </tfoot>
-
+                <tbody>
     <?php foreach ( $text_strings as $key => $string ) : ?>
                     <tr valign="top">
                         <th scope="row" style="width:400px;"><label for="bp_like_admin_text_string_<?php echo $key; ?>"><?php echo htmlspecialchars( $string['default'] ); ?></label></th>
