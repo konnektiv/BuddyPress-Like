@@ -131,8 +131,11 @@ class BPLIKE_Likes_Component extends BP_Component {
       $slug          = bplike_get_likes_slug();
       $likes_link = trailingslashit( $user_domain . $slug );
 
-      $activity_slug = bp_get_activity_slug();
-      $activity_link = trailingslashit( $user_domain . $activity_slug );
+      $activity_link = "";
+      if ( bp_is_active( 'activity' ) && isset( $bp->pages->activity ) ) {
+        $activity_slug = bp_get_activity_slug();
+        $activity_link = trailingslashit( $user_domain . $activity_slug );
+      }
 
       // Only grab count if we're on a user page
   		if ( bp_is_user() ) {
