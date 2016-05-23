@@ -57,9 +57,8 @@ function bp_like_activity_update_notification( $activity_id, $receiver_user_id )
 	// Now email the user with the contents of the message (if they have enabled email notifications).
   // TODO change 'notification_activity_new_mention' to bp like notification settings options
 	if ( 'no' != bp_get_user_meta( $receiver_user_id, 'notification_activity_new_mention', true ) ) {
-    // TODO change this to user who liked activty update
 
-    $users_who_like = array_keys((array)(bp_activity_get_meta( $bp_like_id , 'liked_count' , true )));
+	$users_who_like = BPLIKE_LIKES::get_likers($activity_id, 'activity_update');
 
     if ( count( $users_who_like ) == 1 ) {
       // If only one person likes the current item.
@@ -174,6 +173,7 @@ To view your liked update, log in and visit: %3$s
 		 */
 		$message = apply_filters( 'bp_like_update_liked_notification_message', $message, $poster_name, $content, $message_link, $settings_link );
 
+		error_log("Sending email: $receiver_user_id: $to: $subject: $message");
 		wp_mail( $to, $subject, $message );
 	}
 
@@ -188,9 +188,13 @@ To view your liked update, log in and visit: %3$s
 	 * @param string               $content          Content of the @mention.
 	 * @param int                  $receiver_user_id The ID of the user who is receiving the update.
 	 */
-	do_action( 'bp_like_sent_update_email', $activity, $subject, $message, $content, $receiver_user_id );
+	do_action( 'bp_like_sent_update_like_email', $activity, $subject, $message, $content, $receiver_user_id );
 // need to add do_action here with hook to call function to add notification
 }
+
+add_action( "bp_like_activity_update_add_like",  function($user_id, $item_id) {
+	bp_like_activity_update_notification($item_id, bplike_get_activity_like_receiver($item_id));
+}, 10, 2);
 
 /**
  * Send email and BP notifications when an activity item receives a comment.
@@ -437,43 +441,7 @@ add_action( 'bp_like_new_comment_like', 'bp_like_comment_like_notification_helpe
  */
 function bp_like_format_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
 
-	switch ( $action ) {
-	case 'activity_update_like':
-		$activity_id      = $item_id;
-		$liker_user_id   = $secondary_item_id;
-		$activity_update_link  = 'http://testing'; // todo change this once we're closer
-		$activity_update_title = sprintf( __( '@%s Likes', 'buddypress' ), bp_get_loggedin_user_username() );
-		$amount = 'single';
-		if ( (int) $total_items > 1 ) {
-			$text = sprintf( __( '%1$d people liked your update', 'buddypress-like' ), (int) $total_items );
-			$amount = 'multiple';
-		} else {
-			$user_fullname = bp_core_get_user_displayname( $liker_user_id );
-			$text =  sprintf( __( '%1$s liked your update', 'buddypress-like' ), $user_fullname );
-		}
-		break;
-	}
-
-	if ( 'string' == $format ) {
-
-		/**
-		 * Filters the @mention notification for the string format.
-		 *
-		 * This is a variable filter that is dependent on how many items
-		 * need notified about. The two possible hooks are bp_activity_single_at_mentions_notification
-		 * or bp_activity_multiple_at_mentions_notification.
-		 *
-		 * @since 1.5.0
-		 *
-		 * @param string $string          HTML anchor tag for the mention.
-		 * @param string $at_mention_link The permalink for the mention.
-		 * @param int    $total_items     How many items being notified about.
-		 * @param int    $activity_id     ID of the activity item being formatted.
-		 * @param int    $poster_user_id  ID of the user who liked the update.
-		 */
-	//	$return = apply_filters( 'bp_activity_' . $amount . '_at_mentions_notification', '<a href="' . esc_url( $activity_update_link ) . '" title="' . esc_attr( $activity_update_title ) . '">' . esc_html( $text ) . '</a>', $activity_update_link, (int) $total_items, $activity_id, $liker_user_id );
-			$return = 'This is a test format';
-	}
+	error_log("Activitty format noti:$format");
 
 	/**
 	 * Fires right before returning the formatted activity notifications.
@@ -485,15 +453,43 @@ function bp_like_format_notifications( $action, $item_id, $secondary_item_id, $t
 	 * @param int    $secondary_item_id @mention mentioner ID.
 	 * @param int    $total_items       Total amount of items to format.
 	 */
-//	do_action( 'activity_format_notifications', $action, $item_id, $secondary_item_id, $total_items );
+	do_action( 'activity_format_notifications', $action, $item_id, $secondary_item_id, $total_items );
 
-	return $return;
+	switch ( $action ) {
+	case 'activity_update_like':
+		$link = $text = false;
+
+		$link  = bp_activity_get_permalink( $item_id );
+		if ( 1 == $total_items ) {
+			$text = sprintf( __( '%s likes your update', 'buddypress-like'), bp_core_get_user_displayname( $secondary_item_id ) );
+		} else {
+			$text = sprintf( __( '%1$d people liked your update', 'buddypress-like' ), (int) $total_items );
+		}
+
+		break;
+	}
+
+	if ( ! $link || ! $text ) {
+		return false;
+	}
+
+	if ( 'string' == $format ) {
+
+		return apply_filters( 'bp_like_new_like_notification', '<a href="' . $link . '">' . $text . '</a>', $total_items, $link, $text, $item_id, $secondary_item_id );
+	} else {
+		$array = array(
+			'text' => $text,
+			'link' => $link
+		);
+
+		return apply_filters( 'bp_like_new_like_return_notification', $array, $item_id, $secondary_item_id, $total_items );
+	}
 }
 
 /**
- * Notify a member when their nicename is mentioned in an activity stream item.
+ * Notify a member when their activity stream item has been liked.
  *
- * Hooked to the 'bp_activity_sent_mention_email' action, we piggy back off the
+ * Hooked to the 'bp_like_sent_comment_like_email' action, we piggy back off the
  * existing email code for now, since it does the heavy lifting for us. In the
  * future when we separate emails from Notifications, this will need its own
  * 'bp_activity_at_name_send_emails' equivalent helper function.
@@ -506,17 +502,18 @@ function bp_like_format_notifications( $action, $item_id, $secondary_item_id, $t
  * @param string $content (not used) Notification content.
  * @param int    $receiver_user_id   ID of user receiving notification.
  */
-function bp_like_at_mention_add_notification( $activity, $subject, $message, $content, $receiver_user_id ) {
+function bp_like_add_notification( $activity, $subject, $message, $content, $receiver_user_id ) {
 	if ( bp_is_active( 'notifications' ) ) {
 		bp_notifications_add_notification( array(
 			'user_id'           => $receiver_user_id,
 			'item_id'           => $activity->id,
 			'secondary_item_id' => $activity->user_id,
-			'component_name'    => buddypress()->activity->id,
+			'component_name'    => buddypress()->likes->id,
 			'component_action'  => 'activity_update_like',
 			'date_notified'     => bp_core_current_time(),
 			'is_new'            => 1,
 		) );
 	}
 }
-add_action( 'bp_like_sent_comment_like_email', 'bp_like_at_mention_add_notification', 10, 5 );
+add_action( 'bp_like_sent_comment_like_email', 'bp_like_add_notification', 10, 5 );
+add_action( 'bp_like_sent_update_like_email', 'bp_like_add_notification', 10, 5 );

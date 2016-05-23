@@ -78,3 +78,28 @@ function bplike_total_likes_for_user( $user_id = 0 ) {
 
 	return BPLIKE_LIKES::total_liked_count( $user_id );
 }
+
+
+/**
+ * Retrieve the receiver of an activity like.
+ *
+ * @since 0.4
+ *
+ * @param int $item_id ID of the item being liked.
+ * @return int ID of the receiver of the like.
+ */
+function bplike_get_activity_like_receiver( $item_id ) {
+
+	$user_id = 0;
+
+	$activities = bp_activity_get_specific(array(
+		'activity_ids' => $item_id,
+		'display_comments' => true
+	));
+
+	if (!empty($activities['activities'])) {
+		$user_id = $activities['activities'][0]->user_id;
+	}
+
+	return $user_id;
+}

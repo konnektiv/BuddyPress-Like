@@ -69,6 +69,7 @@ function bp_like_admin_page() {
             'enable_blog_post_support' => $_POST['enable_blog_post_support'],
             'bp_like_post_types'       => $_POST['bp_like_post_types'],
             'bp_like_toggle_button'    => $_POST['bp_like_toggle_button'],
+            'enable_notifications'     => $_POST['enable_notifications'],
             )
         );
 

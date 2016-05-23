@@ -22,7 +22,8 @@ class BPLIKE_Likes_Component extends BP_Component {
    * @since 0.4
    */
   public function __construct() {
-    $this->includes();
+    global $bp;
+
     parent::start(
       'likes',
       _x( 'Likes', 'Likes screen page <title>', 'buddypress-like' ),
@@ -31,6 +32,20 @@ class BPLIKE_Likes_Component extends BP_Component {
         'adminbar_myaccount_order' => 60
       )
     );
+
+    /**
+     * BuddyPress-dependent plugins are loaded too late to depend on BP_Component's
+     * hooks, so we must call the function directly.
+     */
+    $this->includes();
+
+    /**
+     * Put your component into the active components array, so that
+     *   bp_is_active( 'example' );
+     * returns true when appropriate. We have to do this manually, because non-core
+     * components are not saved as active components in the database.
+     */
+    $bp->active_components[$this->id] = '1';
   }
 
   /**
@@ -90,7 +105,7 @@ class BPLIKE_Likes_Component extends BP_Component {
               'root_slug'             => isset( $bp->pages->likes->slug ) ? $bp->pages->likes->slug : BPLIKE_LIKES_SLUG,
               'has_directory'         => false,
               'directory_title'       => _x( 'Likes', 'component directory title', 'buddypress-like' ),
-              'notification_callback' => 'bplike_likes_format_notifications',
+              'notification_callback' => 'bp_like_format_notifications',
               'global_tables'         => $global_tables, // todo currently not used, either start using or curl_multi_remove_handle
               //  'meta_tables'           => $meta_tables,
        );

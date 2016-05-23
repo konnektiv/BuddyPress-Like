@@ -58,5 +58,5 @@ if ( bp_like_get_settings( 'enable_blog_post_support' ) == 1 ) {
 }
 
 if ( bp_is_active( 'notifications' ) && bp_like_get_settings( 'enable_notifications' ) == 1 ) {
-//  require_once( BPLIKE_PATH . 'includes/notifications.php' );
+  require_once( BPLIKE_PATH . 'includes/notifications.php' );
 }
