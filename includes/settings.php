@@ -15,7 +15,7 @@ function bp_like_get_settings( $option = false ) {
     if ( ! $option ) {
         return $settings;
     } else {
-        return $settings[$option];
+        return isset($settings[$option])?$settings[$option]:false;
     }
 }
 
