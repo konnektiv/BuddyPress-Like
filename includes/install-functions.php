@@ -290,5 +290,5 @@ function bp_like_setup_post_insert_hooks() {
 		add_action('wp_insert_post', 'bp_like_init_like_count_total', 10, 3);
 	}
 }
-add_action( 'wp', 'bp_like_setup_post_insert_hooks');
+add_action( 'init', 'bp_like_setup_post_insert_hooks');
 
