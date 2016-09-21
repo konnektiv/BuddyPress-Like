@@ -4,7 +4,7 @@ var jq = jQuery;
 var id, type, curXhr;
 jq(document).ready(function bpLike() {
     "use strict";
-    jq('.like, .unlike').live('click', function() {
+    jq(document).on('click', '.like, .unlike', function() {
 
         if (curXhr) {
           return false;
