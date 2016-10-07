@@ -45,6 +45,9 @@ function bplike_blog_post_button( $content ) {
         view_who_likes( get_the_ID(), 'blog_post');
 
 		$content .= ob_get_clean();
+
+        // do not show like button twice
+        remove_filter('the_content', 'bplike_blog_post_button');
 	}
 	return $content;
 }
