@@ -311,8 +311,8 @@ function bp_like_get_some_likes( $id, $type, $start, $end) {
               array_splice( $users_who_like, $key, 1 );
 
               $others = count ($users_who_like);
-              $one = bp_core_get_userlink( $users_who_like[$others - 1] );
-              $two = bp_core_get_userlink( $users_who_like[$others - 2] );
+              $one = bp_core_get_userlink( $users_who_like[$others - 2] );
+              $two = bp_core_get_userlink( $users_who_like[$others - 1] );
 
               $string .= '<small>';
               $string .= bp_like_get_text( 'you_and_two_usernames_like_this' );
