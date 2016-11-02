@@ -305,7 +305,7 @@ function bp_like_get_some_likes( $id, $type, $start, $end) {
 
         } elseif ( count( $users_who_like ) == 3 ) {
 
-              $key = array_search( get_current_user_id(), $users_who_like, true );
+              $key = array_search( get_current_user_id(), $users_who_like );
 
               // removing current user from $users_who_like
               array_splice( $users_who_like, $key, 1 );
@@ -322,7 +322,7 @@ function bp_like_get_some_likes( $id, $type, $start, $end) {
 
         } elseif (  count( $users_who_like ) > 3 ) {
 
-              $key = array_search( get_current_user_id(), $users_who_like, true );
+              $key = array_search( get_current_user_id(), $users_who_like );
 
               // removing current user from $users_who_like
               array_splice( $users_who_like, $key, 1 );
