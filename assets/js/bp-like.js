@@ -28,7 +28,28 @@ jq(document).ready(function bpLike() {
         var method = type[1];
         type = type[0];
 
+        var countEl = jq(this).find('.like-count');
+        var count = parseInt(countEl.text()||0);
         jq(this).addClass('loading');
+
+
+        // may only need one if and else if
+        // if (like) {} else if (unlike) {} else {oops()}
+        // leave for now as may need something for messages
+        if (method == 'like') {
+            jq(this).removeClass('like')
+                .addClass('unlike')
+                .attr('title', bplikeTerms.unlike_message);
+
+                countEl.text(count+1);
+        } else if (method == 'unlike') {
+
+            jq(this).removeClass('unlike')
+                .addClass('like')
+                .attr('title', bplikeTerms.like_message);
+
+            countEl.text(count-1||'');
+        }
 
         curXhr = jq.post(ajaxurl, {
             action: 'activity_like',
@@ -40,23 +61,6 @@ jq(document).ready(function bpLike() {
                 jq('#' + id).fadeOut(100, function() {
                     jq(this).html(data).removeClass('loading').fadeIn(100);
                 });
-
-                // may only need one if and else if
-                // if (like) {} else if (unlike) {} else {oops()}
-                // leave for now as may need something for messages
-                if (method == 'like') {
-
-                    jq('#' + id).removeClass('like')
-                        .addClass('unlike')
-                        .attr('title', bplikeTerms.unlike_message)
-                        .attr('id', id.replace("like", "unlike") );
-                } else if (method == 'unlike') {
-
-                    jq('#' + id).removeClass('unlike')
-                        .addClass('like')
-                        .attr('title', bplikeTerms.like_message)
-                        .attr('id', id.replace("unlike", "like"));
-                }
 
                 if (type != 'activity_comment')
                     getLikes(id, type);
@@ -84,8 +88,7 @@ jq(document).ready(function bpLike() {
 
     function getItemId(id) {
         return id
-          .replace('like-', '')
-          .replace('unlike-', '')
+          .replace('bp-like-', '')
           .replace('activity-', '')
           .replace('blogpost-', '')
           .replace('comment-', '')

@@ -29,10 +29,10 @@ function bplike_blog_post_button( $content ) {
         ob_start();
 
         if ( ! bp_like_is_liked( get_the_ID(), 'blog_post', get_current_user_id() ) ) { ?>
-            <a href="#" class="blogpost like <?php if (bp_like_get_settings('bp_like_toggle_button')) echo 'toggle'; ?>" id="like-blogpost-<?php echo get_the_ID(); ?>" title="<?php echo bp_like_get_text( 'like_this_item' ); ?>">
+            <a href="#" class="blogpost like <?php if (bp_like_get_settings('bp_like_toggle_button')) echo 'toggle'; ?>" id="bp-like-blogpost-<?php echo get_the_ID(); ?>" title="<?php echo bp_like_get_text( 'like_this_item' ); ?>">
 				<?php echo bp_like_get_text( 'like' ); ?>
         <?php } else { ?>
-            <a href="#" class="blogpost unlike <?php if (bp_like_get_settings('bp_like_toggle_button')) echo 'toggle'; ?>" id="unlike-blogpost-<?php echo get_the_ID(); ?>" title="<?php echo bp_like_get_text( 'unlike_this_item' ); ?>">
+            <a href="#" class="blogpost unlike <?php if (bp_like_get_settings('bp_like_toggle_button')) echo 'toggle'; ?>" id="bp-like-blogpost-<?php echo get_the_ID(); ?>" title="<?php echo bp_like_get_text( 'unlike_this_item' ); ?>">
                 <?php if (bp_like_get_settings('bp_like_toggle_button')) { ?>
                     <span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span>
                 <?php } ?>

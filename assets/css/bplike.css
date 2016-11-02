@@ -1,4 +1,5 @@
-a.unlike.toggle span.unlike-text {
+a.unlike.toggle span.unlike-text,
+a.like span.unlike-text {
     display: none;
 }
 
