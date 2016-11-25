@@ -25,8 +25,9 @@ jq(document).ready(function bpLike() {
         if (type.length < 2)
             return;
 
-        var method = type[1];
         type = type[0];
+
+        var method = jq(this).hasClass('like')?'like':'unlike';
 
         var countEl = jq(this).find('.like-count');
         var count = parseInt(countEl.text()||0);
