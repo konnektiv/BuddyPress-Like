@@ -1,8 +1,10 @@
 a.unlike.toggle span.unlike-text,
+a.unlike span.like-text,
 a.like span.unlike-text {
     display: none;
 }
 
+a.unlike.toggle span.like-text,
 a.unlike.toggle:hover span.unlike-text {
     display: inherit;
 }

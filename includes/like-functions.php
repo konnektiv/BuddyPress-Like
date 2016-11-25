@@ -138,13 +138,10 @@ function bp_like_add_user_like( $item_id, $type ) {
 		/* Do nothing special for now */
     }
 
-    if (bp_like_get_settings('bp_like_toggle_button')) { ?>
-        <span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span>
-    <?php } ?>
-        <span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span>
-    <?php
-    // liked_count should always be at least 1
-    ?><span class="like-count"><?php echo $liked_count; ?></span><?php
+    ?>
+    <span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span>
+    <span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span>
+    <span class="like-count"><?php echo $liked_count; ?></span><?php
 }
 
 /**
@@ -259,9 +256,10 @@ function bp_like_remove_user_like( $item_id = '' , $type = '' ) {
 
        /* Do nothing special for now */
     }
-
-    echo bp_like_get_text( 'like' );
-    echo ' <span class="like-count">' . ( $liked_count ? $liked_count : '' ) . '</span>';
+    ?>
+    <span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span>
+    <span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span>
+    <span class="like-count"><?php echo ($liked_count?$liked_count:''); ?></span><?php
 }
 
 /*
@@ -396,6 +394,25 @@ function bp_like_get_some_likes( $id, $type, $start, $end) {
     }
 
     echo $string;
+}
+
+
+/*
+ * bp_like_get_some_likes()
+ *
+ * Description: Returns a defined number of likers, beginning with more recent.
+ *
+ */
+function bp_like_get_template_vars( $id, $type ) {
+  $vars = array();
+
+  $is_liked = bp_like_is_liked( $id, $type, get_current_user_id() );
+  $vars['classes']  = $is_liked?'unlike':'like';
+  $vars['classes'] .= bp_like_get_settings('bp_like_toggle_button')?' toggle':'';
+  $vars['liked_count'] = count(  BPLIKE_LIKES::get_likers( $id, $type) );
+  $vars['title'] = bp_like_get_text( ( $is_liked?'unlike_this_item':'like_this_item' ) );
+
+  return $vars;
 }
 
 /**
