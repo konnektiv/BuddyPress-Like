@@ -16,7 +16,6 @@ jq(document).ready(function bpLike() {
             .replace('toggle ','')
             .replace('bp-primary-action ','')                   // end space needed to avoid double space in var type
             .replace('button', 'activity_update')               // clearer variable naming
-            .replace('acomment-reply', 'activity_comment')
             .replace('blogpost', 'blog_post')
             .replace('bbp-reply', 'bbp_reply')
             .trim();
