@@ -14,4 +14,4 @@ function bp_like_setup_button() {
     add_action( 'bp_before_blog_single_post', 'bplike_blog_post_button' );
   }
 }
-add_action( 'wp', 'bp_like_setup_button');
+add_action( 'init', 'bp_like_setup_button');
