@@ -21,7 +21,8 @@ function bplike_activity_comment_button() {
         extract( $vars );
 
         ?>
-        <a href="#" class="activity_comment bp-primary-action <?php echo $classes ?>" id="bp-like-activity-<?php echo bp_get_activity_comment_id(); ?>" title="<?php echo $title ?>">
+        <a href="#" class="activity_comment bp-primary-action <?php echo $classes ?>"
+            id="bp-like-activity-comment-<?php echo bp_get_activity_comment_id(); ?>" title="<?php echo $title ?>">
             <span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span>
             <span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span>
             <span class="like-count"><?php echo ( $liked_count ? $liked_count : '' ) ?></span>
