@@ -25,7 +25,7 @@ function bplike_blog_post_comment_button( $content ) {
         extract( $vars );
         ob_start();
 
-        ?><br><a href="#" class="blogpost_comment <?php echo $classes; ?>" id="bp-like-blogpost-comment-<?php echo get_comment_ID(); ?>" title="<?php echo $title; ?>"><span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span><span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span><span class="like-count"><?php echo ($liked_count?$liked_count:''); ?></span></a><br><?php
+        ?><br><a class="blogpost_comment <?php echo $classes; ?>" id="bp-like-blogpost-comment-<?php echo get_comment_ID(); ?>" title="<?php echo $title; ?>"><span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span><span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span><span class="like-count"><?php echo ($liked_count?$liked_count:''); ?></span></a><br><?php
 
         view_who_likes( get_comment_ID(), 'blog_post_comment', '<span', '</span>');
 

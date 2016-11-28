@@ -25,7 +25,7 @@ function bplike_blog_post_button( $content ) {
         extract( $vars );
         ob_start();
 
-        ?><a href="#" class="blogpost <?php echo $classes; ?>" id="bp-like-blogpost-<?php echo get_the_ID(); ?>" title="<?php echo $title; ?>">
+        ?><a class="blogpost <?php echo $classes; ?>" id="bp-like-blogpost-<?php echo get_the_ID(); ?>" title="<?php echo $title; ?>">
                 <span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span>
                 <span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span>
 				<span class="like-count"><?php echo ( $liked_count ? $liked_count : '' ) ?></span>

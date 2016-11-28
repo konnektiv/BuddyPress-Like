@@ -25,7 +25,7 @@ function bplike_bbp_reply_button() {
         extract( $vars );
 
         ?>
-            <a href="#" class="bbp-reply <?php echo $classes ?>" id="bp-like-bbp-reply-<?php echo get_the_ID(); ?>"
+            <a class="bbp-reply <?php echo $classes ?>" id="bp-like-bbp-reply-<?php echo get_the_ID(); ?>"
                title="<?php echo $title; ?>">
                 <span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span>
                 <span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span>
