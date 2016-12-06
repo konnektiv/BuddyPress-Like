@@ -183,6 +183,12 @@ class BPLIKE_LIKES {
 		return false;
 	}
 
+	public static function get_total_likes() {
+		global $wpdb, $bp;
+
+		return $wpdb->get_var( "SELECT COUNT(*) FROM {$bp->likes->table_name}" );
+	}
+
 	public static function item_is_liked($item_id, $type, $user_id) {
 		global $wpdb, $bp;
 

@@ -33,6 +33,19 @@ function bp_like_admin_page_verify_nonce() {
 }
 add_action( 'init' , 'bp_like_admin_page_verify_nonce' );
 
+function bp_like_admin_add_glance_item( $items = array() ) {
+
+    $likes = BPLIKE_LIKES::get_total_likes();
+    $text = _n( '%s Like', '%s Likes', $likes,  'buddypress-like' );
+    $text = sprintf( $text, number_format_i18n( $likes ) );
+    $items[] = '<style>#dashboard_right_now li span.bp-likes:before {
+        content: "\f529";
+    }</style><span class="bp-likes">' . $text . '</span>';
+
+    return $items;
+}
+add_filter( 'dashboard_glance_items', 'bp_like_admin_add_glance_item', 10, 1 );
+
 /**
  * bp_like_admin_page()
  *
