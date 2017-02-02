@@ -12,19 +12,7 @@ jq(document).ready(function bpLike() {
 
         id = jq(this).attr('id');                           // Used to get the id of the entity liked or unliked
 
-        type = jq(this).attr('class')                           //
-            .replace('toggle ','')
-            .replace('bp-primary-action ','')                   // end space needed to avoid double space in var type
-            .replace('button', 'activity_update')               // clearer variable naming
-            .replace('blogpost', 'blog_post')
-            .replace('bbp-reply', 'bbp_reply')
-            .trim();
-        type = type.split(' ');
-
-        if (type.length < 2)
-            return;
-
-        type = type[0];
+        type = jq(this).data('like-type');
 
         var method = jq(this).hasClass('like')?'like':'unlike';
 

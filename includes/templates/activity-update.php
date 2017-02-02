@@ -34,6 +34,7 @@ function bplike_activity_update_button() {
         'new_forum_topic',
         'new_forum_post',
     );
+    $type = 'activity_update';
 
     if ( $activity_obj->type == 'new_blog_post' ) {
         $post_type = 'post';
@@ -48,14 +49,14 @@ function bplike_activity_update_button() {
         return;
     }
 
-    $vars = bp_like_get_template_vars( bp_get_activity_id(), 'activity_update' );
+    $vars = bp_like_get_template_vars( bp_get_activity_id(), $type );
     extract( $vars );
 
 
    ?>
     <a class="button bp-primary-action <?php echo $classes ?>"
         id="bp-like-activity-<?php echo bp_get_activity_id(); ?>"
-        title="<?php echo $title ?>">
+        title="<?php echo $title ?>" data-like-type="<?php echo $type ?>">
         <span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span>
         <span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span>
         <span class="like-count"><?php echo ( $liked_count ? $liked_count : '' ) ?></span>
@@ -63,6 +64,6 @@ function bplike_activity_update_button() {
     <?php
 
     // Checking if there are users who like item.
-    view_who_likes( bp_get_activity_id(), 'activity_update' );
+    view_who_likes( bp_get_activity_id(), $type );
 
 }

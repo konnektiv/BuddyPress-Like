@@ -16,17 +16,20 @@
  */
 function bplike_activity_comment_button() {
 
-    if ( is_user_logged_in() ) {
-        $vars = bp_like_get_template_vars( bp_get_activity_comment_id(), 'activity_comment' );
-        extract( $vars );
-
-        ?>
-        <a href="#" class="activity_comment bp-primary-action <?php echo $classes ?>"
-            id="bp-like-activity-comment-<?php echo bp_get_activity_comment_id(); ?>" title="<?php echo $title ?>">
-            <span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span>
-            <span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span>
-            <span class="like-count"><?php echo ( $liked_count ? $liked_count : '' ) ?></span>
-        </a>
-        <?php
+    if ( ! is_user_logged_in() ) {
+        return;
     }
+
+    $vars = bp_like_get_template_vars( bp_get_activity_comment_id(), 'activity_comment' );
+    extract( $vars );
+
+    ?>
+    <a href="#" class="activity_comment bp-primary-action <?php echo $classes ?>"
+        id="bp-like-activity-comment-<?php echo bp_get_activity_comment_id(); ?>"
+        title="<?php echo $title ?>" data-like-type="activity_comment">
+        <span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span>
+        <span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span>
+        <span class="like-count"><?php echo ( $liked_count ? $liked_count : '' ) ?></span>
+    </a>
+    <?php
 }
