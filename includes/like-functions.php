@@ -134,8 +134,9 @@ function bp_like_add_user_like( $item_id, $type ) {
         }
 
         do_action('bp_like_blog_post_add_like', $user_id, $item_id);
-    } elseif ( $type == 'blog_post_comment' ) {
+    } else {
 		/* Do nothing special for now */
+        do_action("bp_like_${type}_add_like", $user_id, $item_id);
     }
 
     ?>
