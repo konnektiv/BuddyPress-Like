@@ -64,24 +64,6 @@ function bp_like_add_user_like( $item_id, $type ) {
         bp_like_post_to_stream( $item_id, $user_id, $group_id );
 
         do_action('bp_like_activity_update_add_like', $user_id, $item_id);
-    } elseif ( $type == 'activity_comment' ) {
-
-        do_action('bp_like_activity_comment_add_like', $user_id, $item_id);
-
-        // setup for notifications
-
-        // Get the parent activity.
-        $activity  = new BP_Activity_Activity( $item_id );
-        $params = array(
-          'user_id'     => $user_id,
-          'activity_id' => $item_id,
-          'type'        => $type,
-          'content'     => $activity->content
-        );
-        $activity_id = $params['activity_id'];
-
-        // send off notification
-        do_action( 'bp_like_new_comment_like', $item_id, $params, $activity );
 
     } elseif ( $type == 'blog_post' ) {
 
