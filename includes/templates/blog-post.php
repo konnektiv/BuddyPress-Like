@@ -47,3 +47,4 @@ function bplike_blog_post_button( $content ) {
 	return $content;
 }
 add_filter('the_content', 'bplike_blog_post_button');
+add_filter('bbp_get_topic_content', 'bplike_blog_post_button', 99);
