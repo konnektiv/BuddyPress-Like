@@ -458,7 +458,14 @@ function bp_like_format_notifications( $action, $item_id, $secondary_item_id, $t
 
 		$link  = bp_activity_get_permalink( $item_id );
 		$activity = new BP_Activity_Activity( $item_id );
-		$content = wp_trim_words( $activity->content, 12,  ' ...' );
+		$content = strip_tags( $activity->content );
+
+		if ( empty( $content ) ) {
+			$content = strip_tags( $activity->action );
+		}
+
+		$content = wp_trim_words( $content, 12,  ' ...' );
+
 
 		if ( 1 == $total_items ) {
 			$text = sprintf( __( '%s likes your update: <em>%s</em>', 'buddypress-like'), $user_display_name, $content );
