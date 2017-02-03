@@ -20,13 +20,37 @@ function bplike_activity_comment_button() {
         return;
     }
 
-    $vars = bp_like_get_template_vars( bp_get_activity_comment_id(), 'activity_comment' );
+    $type = 'activity_comment';
+    $id = bp_get_activity_comment_id();
+
+    $comments_query = new WP_Comment_Query;
+    $comments = $comments_query->query( array(
+        'meta_key'   => 'bp_activity_comment_id',
+        'meta_value' => $id
+    ) );
+
+    // this activity comment is synchronized with a post comment
+    // so also synchronize the likes
+    if ( $comments ) {
+        $comment = $comments[0];
+        $post_type = get_post_type( $comment->comment_post_ID );
+
+        if ( ! ( $settings = bp_like_get_settings('bp_like_post_types') ) ||
+             ! in_array( $post_type, $settings ) ) {
+            return;
+        }
+
+        $id = $comment->comment_ID;
+        $type = 'blog_post_comment';
+    }
+
+    $vars = bp_like_get_template_vars( $id, $type );
     extract( $vars );
 
     ?>
     <a href="#" class="activity_comment bp-primary-action <?php echo $classes ?>"
-        id="bp-like-activity-comment-<?php echo bp_get_activity_comment_id(); ?>"
-        title="<?php echo $title ?>" data-like-type="activity_comment">
+        id="bp-like-activity-comment-<?php echo $id; ?>"
+        title="<?php echo $title ?>" data-like-type="<?php echo $type ?>">
         <span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span>
         <span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span>
         <span class="like-count"><?php echo ( $liked_count ? $liked_count : '' ) ?></span>
