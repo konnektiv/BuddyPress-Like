@@ -727,3 +727,19 @@ function bp_like_notifications_like_removed( $user_id, $item_id ) {
 
 }
 add_action( 'bp_like_remove_like', 'bp_like_notifications_like_removed' );
+
+/**
+ * Remove notifications if activity update has been deleted
+**/
+function bp_like_activities_deleted( $activity_ids_deleted ) {
+
+	foreach ( $activity_ids_deleted as $activity_id ) {
+		BP_Notifications_Notification::delete(
+			array( 'item_id' => $activity_id,
+			       'component_name'    => buddypress()->likes->id,
+				)
+		);
+	}
+
+}
+add_action( 'bp_activity_deleted_activities', 'bp_like_activities_deleted' );
