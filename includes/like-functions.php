@@ -257,6 +257,8 @@ function bp_like_remove_user_like( $item_id = '' , $type = '' ) {
 
        /* Do nothing special for now */
     }
+
+    do_action("bp_like_remove_like", $user_id, $item_id);
     ?>
     <span class="like-text"><?php echo bp_like_get_text( 'like' ); ?></span>
     <span class="unlike-text"><?php echo bp_like_get_text( 'unlike' ); ?></span>
