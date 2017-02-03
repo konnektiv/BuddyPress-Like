@@ -30,15 +30,13 @@ function bplike_activity_update_button() {
     $activity_obj = new BP_Activity_Activity( bp_get_activity_id() );
 
     $post_type = false;
-    $forum_topic_actions = array(
-        'new_forum_topic',
-        'new_forum_post',
-    );
 
     if ( $activity_obj->type == 'new_blog_post' ) {
         $post_type = 'post';
-    } elseif ( false !== array_search( $activity_obj->type, $forum_topic_actions ) ) {
+    } elseif ( $activity_obj->type == 'bbp_topic_create' ) {
         $post_type = 'topic';
+    } elseif ( $activity_obj->type == 'bbp_reply_create' ) {
+        $post_type = 'reply';
     } else if ( ! empty( $bp->activity->track ) && false !== array_search( $activity_obj->type, array_keys( $bp->activity->track ) ) ) {
         $post_type = $bp->activity->track[$activity_obj->type]->post_type;
     }
@@ -51,7 +49,13 @@ function bplike_activity_update_button() {
     $type = 'activity_update';
     $id = bp_get_activity_id();
 
-    if ( $post_type ) {
+    if ( $post_type == 'reply' ) {
+        $type = 'bbp_reply';
+        $id = $activity_obj->item_id;
+    } elseif ( $post_type == 'topic' ) {
+        $type = 'blog_post';
+        $id = $activity_obj->item_id;
+    } elseif ( $post_type ) {
         $type = 'blog_post';
         $id = $activity_obj->secondary_item_id;
     }
