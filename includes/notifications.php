@@ -416,64 +416,28 @@ add_action( 'bp_like_new_comment_like', 'bp_like_comment_like_notification_helpe
 
 /** Notifications *************************************************************/
 
+function bp_like_string_starts_with( $haystick, $search ) {
+	return substr($haystick, 0, strlen($search)) === $search;
+}
+
 /**
  * Format notifications related to activity.
  *
  * @since 0.4
  *
- * @uses bp_loggedin_user_domain()
- * @uses bp_get_activity_slug()
  * @uses bp_core_get_user_displayname()
- * @uses apply_filters() To call the 'bp_activity_multiple_at_mentions_notification' hook.
- * @uses apply_filters() To call the 'bp_activity_single_at_mentions_notification' hook.
+ * @uses apply_filters() To call the 'bp_like_new_like_notification' hook.
+ * @uses apply_filters() To call the 'bp_like_new_like_return_notification' hook.
  * @uses do_action() To call 'activity_format_notifications' hook.
  *
- * @param string $action            The type of activity item. Just 'new_at_mention' for now.
- * @param int    $item_id           The activity ID.
- * @param int    $secondary_item_id In the case of at-mentions, this is the mentioner's ID.
+ * @param string $action            The type of activity item. Identifies the type of content being liked.
+ * @param int    $item_id           The ID of the item being liked.
+ * @param int    $secondary_item_id In the case of bp like, this is the liker's ID.
  * @param int    $total_items       The total number of notifications to format.
  * @param string $format            'string' to get a BuddyBar-compatible notification, 'array' otherwise.
- * @return string $return Formatted @mention notification.
+ * @return string $return Formatted bp like notification.
  */
 function bp_like_format_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
-
-	switch ( $action ) {
-	case 'activity_update_like':
-		$activity_id      = $item_id;
-		$liker_user_id   = $secondary_item_id;
-		$activity_update_link  = 'http://testing'; // todo change this once we're closer
-		$activity_update_title = sprintf( __( '@%s Likes', 'buddypress' ), bp_get_loggedin_user_username() );
-		$amount = 'single';
-		if ( (int) $total_items > 1 ) {
-			$text = sprintf( __( '%1$d people liked your update', 'buddypress-like' ), (int) $total_items );
-			$amount = 'multiple';
-		} else {
-			$user_fullname = bp_core_get_user_displayname( $liker_user_id );
-			$text =  sprintf( __( '%1$s liked your update', 'buddypress-like' ), $user_fullname );
-		}
-		break;
-	}
-
-	if ( 'string' == $format ) {
-
-		/**
-		 * Filters the @mention notification for the string format.
-		 *
-		 * This is a variable filter that is dependent on how many items
-		 * need notified about. The two possible hooks are bp_activity_single_at_mentions_notification
-		 * or bp_activity_multiple_at_mentions_notification.
-		 *
-		 * @since 1.5.0
-		 *
-		 * @param string $string          HTML anchor tag for the mention.
-		 * @param string $at_mention_link The permalink for the mention.
-		 * @param int    $total_items     How many items being notified about.
-		 * @param int    $activity_id     ID of the activity item being formatted.
-		 * @param int    $poster_user_id  ID of the user who liked the update.
-		 */
-	//	$return = apply_filters( 'bp_activity_' . $amount . '_at_mentions_notification', '<a href="' . esc_url( $activity_update_link ) . '" title="' . esc_attr( $activity_update_title ) . '">' . esc_html( $text ) . '</a>', $activity_update_link, (int) $total_items, $activity_id, $liker_user_id );
-			$return = 'This is a test format';
-	}
 
 	/**
 	 * Fires right before returning the formatted activity notifications.
@@ -485,38 +449,281 @@ function bp_like_format_notifications( $action, $item_id, $secondary_item_id, $t
 	 * @param int    $secondary_item_id @mention mentioner ID.
 	 * @param int    $total_items       Total amount of items to format.
 	 */
-//	do_action( 'activity_format_notifications', $action, $item_id, $secondary_item_id, $total_items );
+	do_action( 'activity_format_notifications', $action, $item_id, $secondary_item_id, $total_items );
 
-	return $return;
+	$link = $text = false;
+	$user_display_name = bp_core_get_user_displayname( $secondary_item_id );
+
+	if ( bp_like_string_starts_with( $action, 'activity_update_like' ) ) {
+
+		$link  = bp_activity_get_permalink( $item_id );
+		$activity = new BP_Activity_Activity( $item_id );
+		$content = wp_trim_words( $activity->content, 12,  ' ...' );
+
+		if ( 1 == $total_items ) {
+			$text = sprintf( __( '%s likes your update: <em>%s</em>', 'buddypress-like'), $user_display_name, $content );
+		} else {
+			$text = sprintf( __( '%1$d people liked your update: <em>%s</em>', 'buddypress-like' ), (int) $total_items, $content );
+		}
+
+	} elseif ( bp_like_string_starts_with( $action, 'activity_comment_like' ) ) {
+
+		$link  = bp_activity_get_permalink( $item_id );
+		$activity = new BP_Activity_Activity( $item_id );
+		$content = wp_trim_words( $activity->content, 12,  ' ...' );
+
+		if ( 1 == $total_items ) {
+			$text = sprintf( __( '%s likes your comment: <em>%s</em>', 'buddypress-like'), $user_display_name, $content );
+		} else {
+			$text = sprintf( __( '%1$d people liked your comment: <em>%s</em>', 'buddypress-like' ), (int) $total_items, $content );
+		}
+
+	} elseif ( bp_like_string_starts_with( $action, 'blog_post_like' ) ) {
+
+		$link = get_permalink( $item_id );
+		$post = get_post( $item_id );
+		$post_type = get_post_type_object( $post->post_type );
+
+		if ( 1 == $total_items ) {
+			$text = sprintf( __( '%s likes your <strong>%s</strong>: <em>%s</em>', 'buddypress-like'),
+				$user_display_name,
+				$post_type->labels->singular_name, $post->post_title );
+		} else {
+			$text = sprintf( __( '%1$d people liked your <strong>%s</strong>: <em>%s</em>', 'buddypress-like'),
+				(int) $total_items,
+				$post_type->labels->name, $post->post_title );
+		}
+
+	} elseif ( bp_like_string_starts_with( $action, 'bbp_reply_like' ) ) {
+
+		$topic_id = bbp_get_reply_topic_id( $item_id );
+		$topic = bbp_get_topic( $topic_id );
+		$reply = bbp_get_reply( $item_id );
+		$link = bbp_get_topic_permalink( $topic_id );
+		$post = get_post( $item_id );
+		$topic_post_type = get_post_type_object( bbp_get_topic_post_type() );
+		$reply_post_type = get_post_type_object( bbp_get_reply_post_type() );
+		$content = wp_trim_words( $reply->post_content, 12,  ' ...' );
+
+		if ( 1 == $total_items ) {
+			$text = sprintf( __( '%s likes your <strong>%s</strong> to the %s <em>%s</em>: <em>%s</em>', 'buddypress-like'),
+				$user_display_name,
+				$reply_post_type->labels->singular_name, $topic_post_type->labels->singular_name, $topic->post_title, $content );
+		} else {
+			$text = sprintf( __( '%1$d people liked your <strong>%s</strong> to the %s <em>%s</em>: <em>%s</em>', 'buddypress-like'),
+				(int) $total_items,
+				$reply_post_type->labels->singular_name, $topic_post_type->labels->singular_name, $topic->post_title, $content );
+		}
+
+	} elseif ( bp_like_string_starts_with( $action, 'blog_post_comment_like' ) ) {
+
+		$comment = get_comment( $item_id );
+		$link = get_comment_link( $comment );
+		$post = get_post( $comment->comment_post_ID );
+		$comment_content = wp_trim_words( $comment->comment_content, 12,  ' ...' );
+		$post_type = get_post_type_object( $post->post_type );
+
+		if ( 1 == $total_items ) {
+			$text = sprintf( __( '%s likes your comment on the <strong>%s</strong> %s: <em>%s</em>', 'buddypress-like'),
+				$user_display_name,
+				$post_type->labels->singular_name, $post->post_title, $comment_content );
+		} else {
+			$text = sprintf( __( '%1$d people liked your comment on the <strong>%s</strong> %s: <em>%s</em>', 'buddypress-like'),
+				(int) $total_items,
+				$post_type->labels->name, $post->post_title, $comment_content );
+		}
+
+	}
+
+	if ( ! $link || ! $text ) {
+		return false;
+	}
+
+	if ( 'string' == $format ) {
+
+		return apply_filters( 'bp_like_new_like_notification', '<a href="' . $link . '">' . $text . '</a>', $action, $total_items, $link, $text, $item_id, $secondary_item_id );
+	} else {
+		$array = array(
+			'text' => $text,
+			'link' => $link
+		);
+
+		return apply_filters( 'bp_like_new_like_return_notification', $array, $action, $item_id, $secondary_item_id, $total_items );
+	}
 }
 
 /**
- * Notify a member when their nicename is mentioned in an activity stream item.
+ * Notify a member when their content has been liked.
  *
- * Hooked to the 'bp_activity_sent_mention_email' action, we piggy back off the
- * existing email code for now, since it does the heavy lifting for us. In the
- * future when we separate emails from Notifications, this will need its own
- * 'bp_activity_at_name_send_emails' equivalent helper function.
  *
  * @since 1.9.0
  *
- * @param object $activity           Activity object.
- * @param string $subject (not used) Notification subject.
- * @param string $message (not used) Notification message.
- * @param string $content (not used) Notification content.
- * @param int    $receiver_user_id   ID of user receiving notification.
+ * @param int    $receiver_user_id  ID of user receiving notification.
+ * @param int    $item_id 			ID of the item being liked
+ * @param int    $liker_id 			ID of user who liked the item
+ * @param string $action 			String which identifies the type of content being liked
  */
-function bp_like_at_mention_add_notification( $activity, $subject, $message, $content, $receiver_user_id ) {
-	if ( bp_is_active( 'notifications' ) ) {
+function bp_like_add_notification( $receiver_user_id, $item_id, $liker_id, $action ) {
+	if ( bp_is_active( 'notifications' ) && $receiver_user_id != $liker_id ) {
 		bp_notifications_add_notification( array(
 			'user_id'           => $receiver_user_id,
-			'item_id'           => $activity->id,
-			'secondary_item_id' => $activity->user_id,
-			'component_name'    => buddypress()->activity->id,
-			'component_action'  => 'activity_update_like',
+			'item_id'           => $item_id,
+			'secondary_item_id' => $liker_id,
+			'component_name'    => buddypress()->likes->id,
+			'component_action'  => "${action}_${item_id}",
 			'date_notified'     => bp_core_current_time(),
 			'is_new'            => 1,
 		) );
 	}
 }
-add_action( 'bp_like_sent_comment_like_email', 'bp_like_at_mention_add_notification', 10, 5 );
+
+function bp_like_activity_update_like_notification_helper( $user_id, $item_id ) {
+
+	$action = 'activity_update_like';
+
+	$activity = new BP_Activity_Activity( $item_id );
+
+	$receiver_user_id = $activity->user_id;
+
+	bp_like_add_notification( $receiver_user_id, $item_id, $user_id, $action );
+}
+add_action( 'bp_like_activity_update_add_like', 'bp_like_activity_update_like_notification_helper', 10, 2 );
+
+function bp_like_activity_comment_like_notification_helper( $user_id, $item_id ) {
+
+	$action = 'activity_comment_like';
+
+	$activity = new BP_Activity_Activity( $item_id );
+
+	$receiver_user_id = $activity->user_id;
+
+	bp_like_add_notification( $receiver_user_id, $item_id, $user_id, $action );
+}
+add_action( 'bp_like_activity_comment_add_like', 'bp_like_activity_comment_like_notification_helper', 10, 2 );
+
+function bp_like_blog_post_like_notification_helper( $user_id, $item_id ) {
+
+	$action = 'blog_post_like';
+
+	$post = get_post( $item_id );
+
+	$receiver_user_id = $post->post_author;
+
+	bp_like_add_notification( $receiver_user_id, $item_id, $user_id, $action );
+}
+add_action( 'bp_like_blog_post_add_like', 'bp_like_blog_post_like_notification_helper', 10, 2 );
+
+function bp_like_blog_post_comment_like_notification_helper( $user_id, $item_id ) {
+
+	$action = 'blog_post_comment_like';
+
+	$comment = get_comment( $item_id );
+
+	$receiver_user_id = $comment->user_id;
+
+	bp_like_add_notification( $receiver_user_id, $item_id, $user_id, $action );
+}
+add_action( 'bp_like_blog_post_comment_add_like', 'bp_like_blog_post_comment_like_notification_helper', 10, 2 );
+
+function bp_like_bbp_reply_like_notification_helper( $user_id, $item_id ) {
+
+	$action = 'bbp_reply_like';
+
+	$post = get_post( $item_id );
+
+	$receiver_user_id = $post->post_author;
+
+	bp_like_add_notification( $receiver_user_id, $item_id, $user_id, $action );
+}
+add_action( 'bp_like_bbp_reply_add_like', 'bp_like_bbp_reply_like_notification_helper', 10, 2 );
+
+function bp_like_blog_notifications_mark_read() {
+
+	if ( ! bp_is_active( 'notifications' ) ) {
+		return;
+	}
+
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	if ( is_singular() && ( $post_id = get_queried_object_id() ) ) {
+		BP_Notifications_Notification::update(
+			array( 'is_new' => 0 ),
+			array( 'item_id' => $post_id,
+			       'component_name'    => buddypress()->likes->id,
+			       'user_id'           => get_current_user_id(),
+				)
+		);
+
+		// also clear all comment like notifications
+		$comments = get_comments( array( 'post_id' => $post_id ) );
+
+		if ( $comments ) {
+			foreach ( $comments as $comment ) {
+				BP_Notifications_Notification::update(
+					array( 'is_new' => 0 ),
+					array( 'item_id' => $comment->comment_ID,
+					       'component_name'    => buddypress()->likes->id,
+					       'user_id'           => get_current_user_id(),
+						)
+				);
+			}
+		}
+
+	}
+
+}
+add_action( 'template_redirect', 'bp_like_blog_notifications_mark_read' );
+
+function bp_like_bbp_reply_notifications_mark_read() {
+	BP_Notifications_Notification::update(
+		array( 'is_new' => 0 ),
+		array( 'item_id' => bbp_get_reply_id(),
+		       'component_name'    => buddypress()->likes->id,
+		       'user_id'           => get_current_user_id(),
+			)
+	);
+}
+add_action( 'bbp_theme_before_reply_content', 'bp_like_bbp_reply_notifications_mark_read' );
+
+
+function bp_like_activity_notifications_mark_read( $activity ) {
+
+	if ( ! bp_is_active( 'notifications' ) ) {
+		return;
+	}
+
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	// Mark as read any notifications for the current user related to this activity item.
+	bp_notifications_mark_notifications_by_item_id( bp_loggedin_user_id(), $activity->id, buddypress()->likes->id, null );
+
+	// also mark any notifications as read for the activity comments
+
+	$comments = BP_Activity_Activity::get_activity_comments( $activity->id, $activity->mptt_left, $activity->mptt_right, $spam );
+
+	foreach ( $comments as $comment ) {
+		bp_notifications_mark_notifications_by_item_id( bp_loggedin_user_id(), $comment->id, buddypress()->likes->id, null );
+	}
+
+}
+add_action( 'bp_activity_screen_single_activity_permalink', 'bp_like_activity_notifications_mark_read' );
+
+
+function bp_like_notifications_like_removed( $user_id, $item_id ) {
+	if ( ! bp_is_active( 'notifications' ) ) {
+		return;
+	}
+
+	BP_Notifications_Notification::delete(
+		array( 'item_id' => $item_id,
+		       'component_name'    => buddypress()->likes->id,
+		       'secondary_item_id' => $user_id,
+			)
+	);
+
+}
+add_action( 'bp_like_remove_like', 'bp_like_notifications_like_removed' );
