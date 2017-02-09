@@ -470,7 +470,7 @@ function bp_like_format_notifications( $action, $item_id, $secondary_item_id, $t
 		if ( 1 == $total_items ) {
 			$text = sprintf( __( '%s likes your update: <em>%s</em>', 'buddypress-like'), $user_display_name, $content );
 		} else {
-			$text = sprintf( __( '%1$d people liked your update: <em>%s</em>', 'buddypress-like' ), (int) $total_items, $content );
+			$text = sprintf( __( '%1$d people liked your update: <em>%2$s</em>', 'buddypress-like' ), (int) $total_items, $content );
 		}
 
 	} elseif ( bp_like_string_starts_with( $action, 'activity_comment_like' ) ) {
@@ -482,7 +482,7 @@ function bp_like_format_notifications( $action, $item_id, $secondary_item_id, $t
 		if ( 1 == $total_items ) {
 			$text = sprintf( __( '%s likes your comment: <em>%s</em>', 'buddypress-like'), $user_display_name, $content );
 		} else {
-			$text = sprintf( __( '%1$d people liked your comment: <em>%s</em>', 'buddypress-like' ), (int) $total_items, $content );
+			$text = sprintf( __( '%1$d people liked your comment: <em>%2$s</em>', 'buddypress-like' ), (int) $total_items, $content );
 		}
 
 	} elseif ( bp_like_string_starts_with( $action, 'blog_post_like' ) ) {
@@ -496,9 +496,9 @@ function bp_like_format_notifications( $action, $item_id, $secondary_item_id, $t
 				$user_display_name,
 				$post_type->labels->singular_name, $post->post_title );
 		} else {
-			$text = sprintf( __( '%1$d people liked your <strong>%s</strong>: <em>%s</em>', 'buddypress-like'),
+			$text = sprintf( __( '%1$d people liked your <strong>%2$s</strong>: <em>%3$s</em>', 'buddypress-like'),
 				(int) $total_items,
-				$post_type->labels->name, $post->post_title );
+				$post_type->labels->singular_name, $post->post_title );
 		}
 
 	} elseif ( bp_like_string_starts_with( $action, 'bbp_reply_like' ) ) {
@@ -517,7 +517,7 @@ function bp_like_format_notifications( $action, $item_id, $secondary_item_id, $t
 				$user_display_name,
 				$reply_post_type->labels->singular_name, $topic_post_type->labels->singular_name, $topic->post_title, $content );
 		} else {
-			$text = sprintf( __( '%1$d people liked your <strong>%s</strong> to the %s <em>%s</em>: <em>%s</em>', 'buddypress-like'),
+			$text = sprintf( __( '%1$d people liked your <strong>%2$s</strong> to the %3$s <em>%4$s</em>: <em%5$s</em>', 'buddypress-like'),
 				(int) $total_items,
 				$reply_post_type->labels->singular_name, $topic_post_type->labels->singular_name, $topic->post_title, $content );
 		}
@@ -535,9 +535,9 @@ function bp_like_format_notifications( $action, $item_id, $secondary_item_id, $t
 				$user_display_name,
 				$post_type->labels->singular_name, $post->post_title, $comment_content );
 		} else {
-			$text = sprintf( __( '%1$d people liked your comment on the <strong>%s</strong> %s: <em>%s</em>', 'buddypress-like'),
+			$text = sprintf( __( '%1$d people liked your comment on the <strong>%2$s</strong> %3$s: <em>%4$s</em>', 'buddypress-like'),
 				(int) $total_items,
-				$post_type->labels->name, $post->post_title, $comment_content );
+				$post_type->labels->singular_name, $post->post_title, $comment_content );
 		}
 
 	}
