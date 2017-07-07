@@ -5,7 +5,7 @@ language="de_DE"
 
 #generate POT file from source
 find . -name "*.php" > filelist
-xgettext --keyword=__ --keyword=_e --keyword=__n --files-from=filelist --language=PHP -o languages/${namespace}.pot
+xgettext --keyword=__ --keyword=_e --keyword=__n:1,2 --files-from=filelist --language=PHP -o languages/${namespace}.pot
 rm -f filelist
 
 cd languages
