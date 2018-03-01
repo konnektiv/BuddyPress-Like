@@ -3,11 +3,11 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'BP_LIKE_VERSION' ) ) {
-    define( 'BP_LIKE_VERSION', '0.3.0' );
+    define( 'BP_LIKE_VERSION', '0.3.1' );
 }
 
 if ( ! defined( 'BP_LIKE_DB_VERSION' ) ) {
-    define( 'BP_LIKE_DB_VERSION', '51' );
+    define( 'BP_LIKE_DB_VERSION', '52' );
 }
 
 if ( ! defined( 'BPLIKE_PATH' ) ) {

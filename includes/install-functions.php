@@ -220,10 +220,29 @@ function bp_like_install() {
         'enable_notifications'     => $enable_notifications
     );
 
+    bp_like_update_db_version_52();
+
     update_site_option( 'bp_like_db_version', BP_LIKE_DB_VERSION );
     update_site_option( 'bp_like_settings', $settings );
 
     add_action( 'admin_notices', 'bp_like_updated_notice' );
+}
+
+/**
+ * change deprecated activity action 'bbp_reply_like' to 'blog_post_like'
+ * and like type 'bbp_reply' to 'blog_post'
+ *
+ **/
+function bp_like_update_db_version_52() {
+    global $wpdb, $bp;
+
+    // update notifications action
+    $wpdb->query( "UPDATE {$bp->notifications->table_name} SET
+        component_action = CONCAT('blog_post_like_', SUBSTRING_INDEX(component_action, '_', -1 ) )
+        WHERE  component_action LIKE 'bbp_reply_like%'" );
+
+    // update like type
+    $wpdb->update( $bp->likes->table_name, array( 'like_type' => 'blog_post'), array( 'like_type' => 'bbp_reply') );
 }
 
 /**

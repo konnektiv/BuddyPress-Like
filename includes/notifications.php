@@ -487,39 +487,42 @@ function bp_like_format_notifications( $action, $item_id, $secondary_item_id, $t
 
 	} elseif ( bp_like_string_starts_with( $action, 'blog_post_like' ) ) {
 
-		$link = get_permalink( $item_id );
-		$post = get_post( $item_id );
-		$post_type = get_post_type_object( $post->post_type );
+		if ( function_exists('bbp_is_reply') && bbp_is_reply( $item_id ) ) {
+			// a reply was liked
+			$topic_id = bbp_get_reply_topic_id( $item_id );
+			$topic = bbp_get_topic( $topic_id );
+			$reply = bbp_get_reply( $item_id );
+			$link = bbp_get_topic_permalink( $topic_id );
+			$post = get_post( $item_id );
+			$topic_post_type = get_post_type_object( bbp_get_topic_post_type() );
+			$reply_post_type = get_post_type_object( bbp_get_reply_post_type() );
+			$content = wp_trim_words( $reply->post_content, 12,  ' ...' );
 
-		if ( 1 == $total_items ) {
-			$text = sprintf( __( '%s likes your <strong>%s</strong>: <em>%s</em>', 'buddypress-like'),
-				$user_display_name,
-				$post_type->labels->singular_name, $post->post_title );
+			if ( 1 == $total_items ) {
+				$text = sprintf( __( '%s likes your <strong>%s</strong> to the %s <em>%s</em>: <em>%s</em>', 'buddypress-like'),
+					$user_display_name,
+					$reply_post_type->labels->singular_name, $topic_post_type->labels->singular_name, $topic->post_title, $content );
+			} else {
+				$text = sprintf( __( '%1$d people liked your <strong>%2$s</strong> to the %3$s <em>%4$s</em>: <em%5$s</em>', 'buddypress-like'),
+					(int) $total_items,
+					$reply_post_type->labels->singular_name, $topic_post_type->labels->singular_name, $topic->post_title, $content );
+			}
 		} else {
-			$text = sprintf( __( '%1$d people liked your <strong>%2$s</strong>: <em>%3$s</em>', 'buddypress-like'),
-				(int) $total_items,
-				$post_type->labels->singular_name, $post->post_title );
-		}
+			// any othe post type was liked
+			$post = get_post( $item_id );
+			$link = get_permalink( $item_id );
 
-	} elseif ( bp_like_string_starts_with( $action, 'bbp_reply_like' ) ) {
+			$post_type = get_post_type_object( $post->post_type );
 
-		$topic_id = bbp_get_reply_topic_id( $item_id );
-		$topic = bbp_get_topic( $topic_id );
-		$reply = bbp_get_reply( $item_id );
-		$link = bbp_get_topic_permalink( $topic_id );
-		$post = get_post( $item_id );
-		$topic_post_type = get_post_type_object( bbp_get_topic_post_type() );
-		$reply_post_type = get_post_type_object( bbp_get_reply_post_type() );
-		$content = wp_trim_words( $reply->post_content, 12,  ' ...' );
-
-		if ( 1 == $total_items ) {
-			$text = sprintf( __( '%s likes your <strong>%s</strong> to the %s <em>%s</em>: <em>%s</em>', 'buddypress-like'),
-				$user_display_name,
-				$reply_post_type->labels->singular_name, $topic_post_type->labels->singular_name, $topic->post_title, $content );
-		} else {
-			$text = sprintf( __( '%1$d people liked your <strong>%2$s</strong> to the %3$s <em>%4$s</em>: <em%5$s</em>', 'buddypress-like'),
-				(int) $total_items,
-				$reply_post_type->labels->singular_name, $topic_post_type->labels->singular_name, $topic->post_title, $content );
+			if ( 1 == $total_items ) {
+				$text = sprintf( __( '%s likes your <strong>%s</strong>: <em>%s</em>', 'buddypress-like'),
+					$user_display_name,
+					$post_type->labels->singular_name, $post->post_title );
+			} else {
+				$text = sprintf( __( '%1$d people liked your <strong>%2$s</strong>: <em>%3$s</em>', 'buddypress-like'),
+					(int) $total_items,
+					$post_type->labels->singular_name, $post->post_title );
+			}
 		}
 
 	} elseif ( bp_like_string_starts_with( $action, 'blog_post_comment_like' ) ) {
@@ -632,18 +635,6 @@ function bp_like_blog_post_comment_like_notification_helper( $user_id, $item_id 
 }
 add_action( 'bp_like_blog_post_comment_add_like', 'bp_like_blog_post_comment_like_notification_helper', 10, 2 );
 
-function bp_like_bbp_reply_like_notification_helper( $user_id, $item_id ) {
-
-	$action = 'bbp_reply_like';
-
-	$post = get_post( $item_id );
-
-	$receiver_user_id = $post->post_author;
-
-	bp_like_add_notification( $receiver_user_id, $item_id, $user_id, $action );
-}
-add_action( 'bp_like_bbp_reply_add_like', 'bp_like_bbp_reply_like_notification_helper', 10, 2 );
-
 function bp_like_blog_notifications_mark_read() {
 
 	if ( ! bp_is_active( 'notifications' ) ) {
@@ -733,7 +724,7 @@ function bp_like_notifications_like_removed( $user_id, $item_id ) {
 	);
 
 }
-add_action( 'bp_like_remove_like', 'bp_like_notifications_like_removed' );
+add_action( 'bp_like_remove_like', 'bp_like_notifications_like_removed', 10, 2 );
 
 /**
  * Remove notifications if activity update has been deleted

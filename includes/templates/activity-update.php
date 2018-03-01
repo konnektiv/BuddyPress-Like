@@ -49,10 +49,7 @@ function bplike_activity_update_button() {
     $type = 'activity_update';
     $id = bp_get_activity_id();
 
-    if ( $post_type == 'reply' ) {
-        $type = 'bbp_reply';
-        $id = $activity_obj->item_id;
-    } elseif ( $post_type == 'topic' ) {
+    if ( $post_type == 'reply' || $post_type == 'topic' ) {
         $type = 'blog_post';
         $id = $activity_obj->item_id;
     } elseif ( $post_type ) {
