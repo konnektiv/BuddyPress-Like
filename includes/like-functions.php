@@ -317,8 +317,9 @@ function bp_like_get_some_likes( $id, $type, $start, $end) {
               $two = bp_core_get_userlink( $users_who_like[$others - 1] );
 
               $others = $others - 2;
-
-              $string .= '<small>You, %s, %s and %d ' . _n( 'other', 'others', $others ) . ' like this.</small>';
+              $string .= '<small>';
+              $string .= _n( 'You, %s, %s and %d other like this.', 'You, %s, %s and %d others like this.', $others, 'buddypress-like' );
+              $string .= '</small>';
 
               $string = sprintf( $string , $one , $two , $others );
         }
@@ -372,9 +373,11 @@ function bp_like_get_some_likes( $id, $type, $start, $end) {
               $others = $others - 3;
 
               $string .= '<small>';
-              $string .= '%s, %s, %s and %d ' . _n( 'other', 'others', $others ) . ' like this.</small>';
+              $string .= _n('%s, %s, %s and %d other like this.', '%s, %s, %s and %d others like this.', $others, 'buddypress-like' );
+              $string .= '</small>';
 
               $string = sprintf( $string , $one , $two , $three, $others );
+              //error_log("Like: $string");
         }
     }
 

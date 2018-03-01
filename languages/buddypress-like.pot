@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-30 15:04+0200\n"
+"POT-Creation-Date: 2018-03-01 10:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,10 +16,18 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: admin/admin.php:30
 msgid "You do not have permission to do that."
 msgstr ""
+
+#: admin/admin.php:39
+#, php-format
+msgid "%s Like"
+msgid_plural "%s Likes"
+msgstr[0] ""
+msgstr[1] ""
 
 #: admin/admin.php:108
 msgid "Settings saved."
@@ -135,6 +143,11 @@ msgstr ""
 
 #: admin/admin.php:287
 msgid "Custom"
+msgstr ""
+
+#: includes/template.php:100
+#, php-format
+msgid "My Likes %s"
 msgstr ""
 
 #: includes/install-functions.php:14 includes/install-functions.php:15
@@ -287,6 +300,57 @@ msgid ""
 "href=\"plugins.php\">deactivate BuddyPress Like</a>."
 msgstr ""
 
+#: includes/bplike-likes-loader.php:29
+msgctxt "Likes screen page <title>"
+msgid "Likes"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:107
+msgctxt "component directory title"
+msgid "Likes"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:159
+#, php-format
+msgctxt "Likes screen nav with counter"
+msgid "Likes <span class=\"%s\">%s</span>"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:161
+msgctxt "Likes screen nav without counter"
+msgid "Likes"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:176
+msgctxt "Profile activity screen sub nav"
+msgid "Likes"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:186
+msgctxt "Likes screen sub nav"
+msgid "Stats"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:218
+msgctxt "My Account Likes sub nav"
+msgid "Likes"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:232
+msgctxt "My Account Likes sub nav"
+msgid "Statistics"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:259
+msgctxt "Page and <title>"
+msgid "My Likes"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:264
+#, php-format
+msgid "Profile picture of %s"
+msgstr ""
+
 #: includes/notifications.php:71
 #, php-format
 msgid "%s liked your update"
@@ -296,6 +360,12 @@ msgstr ""
 #, php-format
 msgid "%s and %s liked your update"
 msgstr ""
+
+#: includes/notifications.php:97
+msgid "other"
+msgid_plural "others"
+msgstr[0] ""
+msgstr[1] ""
 
 #: includes/notifications.php:97
 #, php-format
@@ -421,12 +491,16 @@ msgid ""
 "em>"
 msgstr ""
 
-#: includes/bplike-likes-loader.php:264
+#: includes/like-functions.php:321
 #, php-format
-msgid "Profile picture of %s"
-msgstr ""
+msgid "You, %s, %s and %d other like this."
+msgid_plural "You, %s, %s and %d others like this."
+msgstr[0] ""
+msgstr[1] ""
 
-#: includes/template.php:100
+#: includes/like-functions.php:376
 #, php-format
-msgid "My Likes %s"
-msgstr ""
+msgid "%s, %s, %s and %d other like this."
+msgid_plural "%s, %s, %s and %d others like this."
+msgstr[0] ""
+msgstr[1] ""

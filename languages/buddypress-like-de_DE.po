@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Buddypress Like 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-27 23:04+0200\n"
+"POT-Creation-Date: 2018-03-01 10:07+0100\n"
 "PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,13 @@ msgstr ""
 #: admin/admin.php:30
 msgid "You do not have permission to do that."
 msgstr ""
+
+#: admin/admin.php:39
+#, php-format
+msgid "%s Like"
+msgid_plural "%s Likes"
+msgstr[0] ""
+msgstr[1] ""
 
 #: admin/admin.php:108
 msgid "Settings saved."
@@ -132,6 +139,11 @@ msgstr ""
 #: admin/admin.php:287
 msgid "Custom"
 msgstr ""
+
+#: includes/template.php:100
+#, php-format
+msgid "My Likes %s"
+msgstr "Meine Likes %s"
 
 #: includes/install-functions.php:14 includes/install-functions.php:15
 msgid "Like"
@@ -253,7 +265,8 @@ msgstr "%s gefällt das."
 msgid ""
 "None of your friends like this yet, but you and %count% other person does."
 msgstr ""
-"Keinem deiner Kontakte gefällt dies bis jetzt, aber dir und %count% anderen Person gefällt es."
+"Keinem deiner Kontakte gefällt dies bis jetzt, aber dir und %count% anderen "
+"Person gefällt es."
 
 #: includes/install-functions.php:118 includes/install-functions.php:119
 #, php-format
@@ -284,6 +297,57 @@ msgid ""
 "href=\"plugins.php\">deactivate BuddyPress Like</a>."
 msgstr ""
 
+#: includes/bplike-likes-loader.php:29
+msgctxt "Likes screen page <title>"
+msgid "Likes"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:107
+msgctxt "component directory title"
+msgid "Likes"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:159
+#, php-format
+msgctxt "Likes screen nav with counter"
+msgid "Likes <span class=\"%s\">%s</span>"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:161
+msgctxt "Likes screen nav without counter"
+msgid "Likes"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:176
+msgctxt "Profile activity screen sub nav"
+msgid "Likes"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:186
+msgctxt "Likes screen sub nav"
+msgid "Stats"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:218
+msgctxt "My Account Likes sub nav"
+msgid "Likes"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:232
+msgctxt "My Account Likes sub nav"
+msgid "Statistics"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:259
+msgctxt "Page and <title>"
+msgid "My Likes"
+msgstr ""
+
+#: includes/bplike-likes-loader.php:264
+#, php-format
+msgid "Profile picture of %s"
+msgstr "Profilbild von %s"
+
 #: includes/notifications.php:71
 #, php-format
 msgid "%s liked your update"
@@ -293,6 +357,12 @@ msgstr "%s gefällt dein Beitrag"
 #, php-format
 msgid "%s and %s liked your update"
 msgstr "%s und %s gefällt dein Beitrag"
+
+#: includes/notifications.php:97
+msgid "other"
+msgid_plural "others"
+msgstr[0] ""
+msgstr[1] ""
 
 #: includes/notifications.php:97
 #, php-format
@@ -341,7 +411,9 @@ msgstr ""
 #: includes/notifications.php:351
 #, php-format
 msgid "To disable these notifications please log in and go to: %s"
-msgstr "Über den folgenden Link kannst du Benachrichtigungen über neue Likes abbestellen: %s"
+msgstr ""
+"Über den folgenden Link kannst du Benachrichtigungen über neue Likes "
+"abbestellen: %s"
 
 #: includes/notifications.php:249
 #, php-format
@@ -388,8 +460,8 @@ msgstr ""
 "\n"
 "\"%2$s\"\n"
 "\n"
-"Den Originalbeitrag, deinen Kommentar und alle Antworten findest du "
-"hier: %3$s\n"
+"Den Originalbeitrag, deinen Kommentar und alle Antworten findest du hier: "
+"%3$s\n"
 "\n"
 "---------------------\n"
 
@@ -448,15 +520,19 @@ msgid ""
 "%1$d people liked your comment on the <strong>%2$s</strong> %3$s: <em>%4$s</"
 "em>"
 msgstr ""
-"%1$d Menschen gefällt dein Kommentar zu <strong>%2$s</strong> %3$s: <em>%4$s</"
-"em>"
+"%1$d Menschen gefällt dein Kommentar zu <strong>%2$s</strong> %3$s: <em>"
+"%4$s</em>"
 
-#: includes/bplike-likes-loader.php:264
+#: includes/like-functions.php:321
 #, php-format
-msgid "Profile picture of %s"
-msgstr "Profilbild von %s"
+msgid "You, %s, %s and %d other like this."
+msgid_plural "You, %s, %s and %d others like this."
+msgstr[0] "Dir, %s, %s und %d anderen Person gefällt das."
+msgstr[1] "Dir, %s, %s und %d anderen Personen gefällt das."
 
-#: includes/template.php:100
+#: includes/like-functions.php:376
 #, php-format
-msgid "My Likes %s"
-msgstr "Meine Likes %s"
+msgid "%s, %s, %s and %d other like this."
+msgid_plural "%s, %s, %s and %d others like this."
+msgstr[0] "%s, %s, %s und %d anderen Person gefällt das."
+msgstr[1] "%s, %s, %s und %d anderen Personen gefällt das."
