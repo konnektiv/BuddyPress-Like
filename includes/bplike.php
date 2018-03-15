@@ -7,7 +7,7 @@ if ( ! defined( 'BP_LIKE_VERSION' ) ) {
 }
 
 if ( ! defined( 'BP_LIKE_DB_VERSION' ) ) {
-    define( 'BP_LIKE_DB_VERSION', '52' );
+    define( 'BP_LIKE_DB_VERSION', '53' );
 }
 
 if ( ! defined( 'BPLIKE_PATH' ) ) {
@@ -23,11 +23,16 @@ load_plugin_textdomain( 'buddypress-like', false,  basename( dirname( dirname( _
  * Returns a custom text string from the database
  *
  */
-function bp_like_get_text( $text = false, $type = 'custom' ) {
+function bp_like_get_text( $text = false ) {
     $settings = get_site_option( 'bp_like_settings' );
     $text_strings = $settings['text_strings'];
-    $string = $text_strings[$text];
-    return $string[$type];
+
+    if ( isset( $text_strings[$text] ) && ! empty( $text_strings[$text] ) )
+      $string = $text_strings[$text];
+    else
+      $string = bp_like_get_default_text_strings( $text );
+
+    return $string;
 }
 
 if ( is_admin() ) {

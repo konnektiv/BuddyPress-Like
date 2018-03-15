@@ -2,131 +2,47 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+function bp_like_get_default_text_strings( $text = false ) {
+    $default_text_strings = array(
+        'like' => __( 'Like' , 'buddypress-like' ),
+        'unlike' => __( 'Unlike' , 'buddypress-like' ),
+        'like_this_item' => __( 'Like this item' , 'buddypress-like' ),
+        'unlike_this_item' => __( 'Unlike this item' , 'buddypress-like' ),
+        'update_likes' => __( 'Update Likes' , 'buddypress-like' ),
+        'show_blogpost_likes' => __( 'Blog Post Likes' , 'buddypress-like' ),
+        'must_be_logged_in' => __( 'Sorry, you must be logged in to like that.' , 'buddypress-like' ),
+        'record_activity_likes_own' => __( '%user% liked their own <a href="%permalink%">update</a>' , 'buddypress-like' ),
+        'record_activity_likes_an' => __( '%user% liked an <a href="%permalink%">update</a>' , 'buddypress-like' ),
+        'record_activity_likes_users' => __( '%user% liked %author%\'s <a href="%permalink%">update</a>' , 'buddypress-like' ),
+        'record_activity_likes_own_blogpost' => __( '%user% liked their own blog post <a href="%permalink%">%title%</a>' , 'buddypress-like' ),
+        'record_activity_likes_a_blogpost' => __( '%user% liked a blog post <a href="%permalink%">%title%</a>' , 'buddypress-like' ),
+        'record_activity_likes_users_blogpost' => __( '%user% liked %author%\'s blog post <a href="%permalink%">%title%</a>' , 'buddypress-like' ),
+        'get_likes_only_liker' => __( 'You like this.' , 'buddypress-like' ) ,
+        'get_likes_you_and_singular' => __( 'You and %count% other person like this.' , 'buddypress-like' ) ,
+        'you_and_username_like_this' => __( 'You and %s like this.' , 'buddypress-like' ) ,
+        'you_and_two_usernames_like_this' => __( 'You, %s and %s like this.' , 'buddypress-like' ) ,
+        'get_likes_you_and_plural' => __( 'You and %count% other people like this' , 'buddypress-like' ) ,
+        'get_likes_count_people_singular' => __( '%count% person likes this.' , 'buddypress-like' ) ,
+        'get_likes_count_people_plural' => __( '%count% people like this.' , 'buddypress-like' ) ,
+        'get_likes_and_people_singular' => __( 'and %count% other person like this.' , 'buddypress-like' ) ,
+        'get_likes_and_people_plural' => __( 'and %count% other people like this.' , 'buddypress-like' ) ,
+        'three_like_this' => __( '%s, %s and %s like this.' , 'buddypress-like' ) ,
+        'two_like_this' => __( '%s and %s like this.' , 'buddypress-like' ) ,
+        'one_likes_this' => __( '%s likes this.' , 'buddypress-like' ) ,
+        'get_likes_no_friends_you_and_singular' => __( 'None of your friends like this yet, but you and %count% other person does.' , 'buddypress-like' ) ,
+        'get_likes_no_friends_you_and_plural' => __( 'None of your friends like this yet, but you and %count% other people do.' , 'buddypress-like' ) ,
+        'get_likes_no_friends_singular' => __( 'None of your friends like this yet, but %count% other person does.' , 'buddypress-like' ) ,
+        'get_likes_no_friends_plural' => __( 'None of your friends like this yet, but %count% other people do.' , 'buddypress-like' )
+    );
+
+    return $text ? $default_text_strings[$text] : $default_text_strings;
+}
 /**
  * bp_like_install()
  *
  * Installs or upgrades the database content
  */
 function bp_like_install() {
-    // build a way to easily change this to other predefined words, eg love, thumbs up
-    $default_text_strings = array(
-        'like' => array(
-            'default' => __( 'Like' , 'buddypress-like' ) ,
-            'custom' => __( 'Like' , 'buddypress-like' )
-        ) ,
-        'unlike' => array(
-            'default' => __( 'Unlike' , 'buddypress-like' ) ,
-            'custom' => __( 'Unlike' , 'buddypress-like' )
-        ) ,
-        'like_this_item' => array(
-            'default' => __( 'Like this item' , 'buddypress-like' ) ,
-            'custom' => __( 'Like this item' , 'buddypress-like' )
-        ) ,
-        'unlike_this_item' => array(
-            'default' => __( 'Unlike this item' , 'buddypress-like' ) ,
-            'custom' => __( 'Unlike this item' , 'buddypress-like' )
-        ) ,
-        'update_likes' => array(
-            'default' => __( 'Update Likes' , 'buddypress-like' ) ,
-            'custom' => __( 'Update Likes' , 'buddypress-like' )
-        ) ,
-        'show_blogpost_likes' => array(
-            'default' => __( 'Blog Post Likes' , 'buddypress-like' ) ,
-            'custom' => __( 'Blog Post Likes' , 'buddypress-like' )
-        ) ,
-        'must_be_logged_in' => array(
-            'default' => __( 'Sorry, you must be logged in to like that.' , 'buddypress-like' ) ,
-            'custom' => __( 'Sorry, you must be logged in to like that.' , 'buddypress-like' )
-        ) ,
-        'record_activity_likes_own' => array(
-            'default' => __( '%user% liked their own <a href="%permalink%">update</a>' , 'buddypress-like' ) ,
-            'custom' => __( '%user% liked their own <a href="%permalink%">update</a>' , 'buddypress-like' )
-        ) ,
-        'record_activity_likes_an' => array(
-            'default' => __( '%user% liked an <a href="%permalink%">update</a>' , 'buddypress-like' ) ,
-            'custom' => __( '%user% liked an <a href="%permalink%">update</a>' , 'buddypress-like' )
-        ) ,
-        'record_activity_likes_users' => array(
-            'default' => __( '%user% liked %author%\'s <a href="%permalink%">update</a>' , 'buddypress-like' ) ,
-            'custom' => __( '%user% liked %author%\'s <a href="%permalink%">update</a>' , 'buddypress-like' )
-        ) ,
-        'record_activity_likes_own_blogpost' => array(
-            'default' => __( '%user% liked their own blog post <a href="%permalink%">%title%</a>' , 'buddypress-like' ) ,
-            'custom' => __( '%user% liked their own blog post <a href="%permalink%">%title%</a>' , 'buddypress-like' )
-        ) ,
-        'record_activity_likes_a_blogpost' => array(
-            'default' => __( '%user% liked a blog post <a href="%permalink%">%title%</a>' , 'buddypress-like' ) ,
-            'custom' => __( '%user% liked an blog post <a href="%permalink%">%title%</a>' , 'buddypress-like' )
-        ) ,
-        'record_activity_likes_users_blogpost' => array(
-            'default' => __( '%user% liked %author%\'s blog post <a href="%permalink%">%title%</a>' , 'buddypress-like' ) ,
-            'custom' => __( '%user% liked %author%\'s blog post <a href="%permalink%">%title%</a>' , 'buddypress-like' )
-        ) ,
-        'get_likes_only_liker' => array(
-            'default' => __( 'You like this.' , 'buddypress-like' ) ,
-            'custom' => __( 'You like this.' , 'buddypress-like' )
-        ) ,
-        'get_likes_you_and_singular' => array(
-            'default' => __( 'You and %count% other person like this.' , 'buddypress-like' ) ,
-            'custom' => __( 'You and %count% other person like this.' , 'buddypress-like' )
-        ) ,
-        'you_and_username_like_this' => array(
-            'default' => __( 'You and %s like this.' , 'buddypress-like' ) ,
-            'custom' => __( 'You and %s like this.' , 'buddypress-like' )
-        ) ,
-        'you_and_two_usernames_like_this' => array(
-            'default' => __( 'You, %s and %s like this.' , 'buddypress-like' ) ,
-            'custom' => __( 'You, %s and %s like this.' , 'buddypress-like' )
-        ) ,
-        'get_likes_you_and_plural' => array(
-            'default' => __( 'You and %count% other people like this' , 'buddypress-like' ) ,
-            'custom' => __( 'You and %count% other people like this' , 'buddypress-like' )
-        ) ,
-        'get_likes_count_people_singular' => array(
-            'default' => __( '%count% person likes this.' , 'buddypress-like' ) ,
-            'custom' => __( '%count% person likes this.' , 'buddypress-like' )
-        ) ,
-        'get_likes_count_people_plural' => array(
-            'default' => __( '%count% people like this.' , 'buddypress-like' ) ,
-            'custom' => __( '%count% people like this.' , 'buddypress-like' )
-        ) ,
-        'get_likes_and_people_singular' => array(
-            'default' => __( 'and %count% other person like this.' , 'buddypress-like' ) ,
-            'custom' => __( 'and %count% other person like this.' , 'buddypress-like' )
-        ) ,
-        'get_likes_and_people_plural' => array(
-            'default' => __( 'and %count% other people like this.' , 'buddypress-like' ) ,
-            'custom' => __( 'and %count% other people like this.' , 'buddypress-like' )
-        ) ,
-        'three_like_this' => array(
-            'default' => __( '%s, %s and %s like this.' , 'buddypress-like' ) ,
-            'custom'  => __( '%s, %s and %s like this.' , 'buddypress-like' )
-        ) ,
-        'two_like_this' => array(
-            'default' => __( '%s and %s like this.' , 'buddypress-like' ) ,
-            'custom'  => __( '%s and %s like this.' , 'buddypress-like' )
-        ) ,
-        'one_likes_this' => array(
-            'default' => __( '%s likes this.' , 'buddypress-like' ) ,
-            'custom' => __( '%s likes this.' , 'buddypress-like' )
-        ) ,
-        'get_likes_no_friends_you_and_singular' => array(
-            'default' => __( 'None of your friends like this yet, but you and %count% other person does.' , 'buddypress-like' ) ,
-            'custom' => __( 'None of your friends like this yet, but you and %count% other person does.' , 'buddypress-like' )
-        ) ,
-        'get_likes_no_friends_you_and_plural' => array(
-            'default' => __( 'None of your friends like this yet, but you and %count% other people do.' , 'buddypress-like' ) ,
-            'custom' => __( 'None of your friends like this yet, but you and %count% other people do.' , 'buddypress-like' )
-        ) ,
-        'get_likes_no_friends_singular' => array(
-            'default' => __( 'None of your friends like this yet, but %count% other person does.' , 'buddypress-like' ) ,
-            'custom' => __( 'None of your friends like this yet, but %count% other person does.' , 'buddypress-like' )
-        ) ,
-        'get_likes_no_friends_plural' => array(
-            'default' => __( 'None of your friends like this yet, but %count% other people do.' , 'buddypress-like' ) ,
-            'custom' => __( 'None of your friends like this yet, but %count% other people do.' , 'buddypress-like' )
-        )
-    );
 
     $current_settings = get_site_option( 'bp_like_settings' );
 
@@ -189,22 +105,18 @@ function bp_like_install() {
         $bp_like_post_types = array('post', 'page');
     }
 
+    $default_text_strings = bp_like_get_default_text_strings();
+
     if ( $current_settings['text_strings'] ) {
 
         /* Go through each string and update the default to the current default, keep the custom settings */
         foreach ( $default_text_strings as $string_name => $string_contents ) {
 
-            $default = $default_text_strings[$string_name]['default'];
             $custom = $current_settings['text_strings'][$string_name]['custom'];
 
-            if ( empty( $custom ) ) {
-                $custom = $default;
-            }
-
-            $text_strings[$string_name] = array('default' => $default , 'custom' => $custom);
+            if ( !empty($custom) )
+                $text_strings[$string_name] = $custom;
         }
-    } else {
-        $text_strings = $default_text_strings;
     }
 
     $settings = array(

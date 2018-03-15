@@ -63,8 +63,8 @@ function bp_like_admin_page() {
         /* Add each text string to the $strings_to_save array */
         foreach ( $_POST as $key => $value ) {
             if ( preg_match( "/text_string_/i" , $key ) ) {
-                $default = bp_like_get_text( str_replace( 'bp_like_admin_text_string_' , '' , $key ) , 'default' );
-                $strings_to_save[str_replace( 'bp_like_admin_text_string_' , '' , $key )] = array('default' => $default , 'custom' => stripslashes( $value ));
+                if ( ! empty( $value ) )
+                    $strings_to_save[str_replace( 'bp_like_admin_text_string_' , '' , $key )] = stripslashes( $value );
             }
         }
 
@@ -293,10 +293,10 @@ function bp_like_admin_page() {
                     </tr>
                 </tfoot>
                 <tbody>
-    <?php foreach ( $text_strings as $key => $string ) : ?>
+    <?php foreach ( bp_like_get_default_text_strings() as $key => $string ) : ?>
                     <tr valign="top">
-                        <th scope="row" style="width:400px;"><label for="bp_like_admin_text_string_<?php echo $key; ?>"><?php echo htmlspecialchars( $string['default'] ); ?></label></th>
-                        <td><input name="bp_like_admin_text_string_<?php echo $key; ?>" id="bp_like_admin_text_string_<?php echo $key; ?>" value="<?php echo htmlspecialchars( $string['custom'] ); ?>" class="regular-text" type="text"></td>
+                        <th scope="row" style="width:400px;"><label for="bp_like_admin_text_string_<?php echo $key; ?>"><?php echo htmlspecialchars( $string ); ?></label></th>
+                        <td><input name="bp_like_admin_text_string_<?php echo $key; ?>" id="bp_like_admin_text_string_<?php echo $key; ?>" value="<?php echo ( isset($text_strings[$key]) ? htmlspecialchars( $text_strings[$key] ) : '' ); ?>" class="regular-text" type="text"></td>
                     </tr>
     <?php endforeach; ?>
                 </tbody>
