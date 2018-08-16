@@ -61,6 +61,8 @@ function bp_like_admin_page() {
     if ( isset( $_POST['_wpnonce'] ) && isset( $_POST['bp_like_updated'] ) ) {
 
         /* Add each text string to the $strings_to_save array */
+        $strings_to_save = array();
+
         foreach ( $_POST as $key => $value ) {
             if ( preg_match( "/text_string_/i" , $key ) ) {
                 if ( ! empty( $value ) )
@@ -71,23 +73,21 @@ function bp_like_admin_page() {
         /* Now actually save the data to the options table */
         update_site_option(
             'bp_like_settings' , array(
-            'likers_visibility'        => $_POST['bp_like_admin_likers_visibility'],
-            'post_to_activity_stream'  => $_POST['bp_like_admin_post_to_activity_stream'],
-            'show_excerpt'             => $_POST['bp_like_admin_show_excerpt'],
-            'excerpt_length'           => $_POST['bp_like_admin_excerpt_length'],
+            'post_to_activity_stream'  => isset( $_POST['bp_like_admin_post_to_activity_stream'] ) ? $_POST['bp_like_admin_post_to_activity_stream'] : null,
+            'show_excerpt'             => isset( $_POST['bp_like_admin_show_excerpt'] ) ? $_POST['bp_like_admin_show_excerpt'] : null,
+            'excerpt_length'           => isset( $_POST['bp_like_admin_excerpt_length'] ) ? (int) $_POST['bp_like_admin_excerpt_length'] : null,
             'text_strings'             => $strings_to_save,
             'translate_nag'            => bp_like_get_settings( 'translate_nag' ),
-            'name_or_avatar'           => $_POST['name_or_avatar'],
-            'remove_fav_button'        => $_POST['bp_like_remove_fav_button'],
-            'enable_blog_post_support' => $_POST['enable_blog_post_support'],
-            'bp_like_post_types'       => $_POST['bp_like_post_types'],
-            'bp_like_toggle_button'    => $_POST['bp_like_toggle_button'],
-            'enable_notifications'     => $_POST['enable_notifications'],
+            'remove_fav_button'        => isset( $_POST['bp_like_remove_fav_button'] ) ? $_POST['bp_like_remove_fav_button'] : null,
+            'enable_blog_post_support' => isset( $_POST['enable_blog_post_support'] ) ? $_POST['enable_blog_post_support'] : null,
+            'bp_like_post_types'       => isset( $_POST['bp_like_post_types'] ) ? $_POST['bp_like_post_types'] : array(),
+            'bp_like_toggle_button'    => isset( $_POST['bp_like_toggle_button'] ) ? $_POST['bp_like_toggle_button'] : null,
+            'enable_notifications'     => isset( $_POST['enable_notifications'] ) ? $_POST['enable_notifications'] : null,
             )
         );
 
         // initialize post like count totals
-        if ($_POST['enable_blog_post_support'] == 1 && isset($_POST['bp_like_post_types'])) {
+        if ( isset( $_POST['enable_blog_post_support'] ) && $_POST['enable_blog_post_support'] == 1 && isset( $_POST['bp_like_post_types'] ) ) {
             $posts = get_posts(array(
                 'post_type' 	 => $_POST['bp_like_post_types'],
                 'posts_per_page' => -1,
@@ -211,9 +211,13 @@ function bp_like_admin_page() {
 
                             foreach ( $post_types as $post_type ) { ?>
                                 <?php $object = get_post_type_object( $post_type ); ?>
-                                <input type="checkbox" name="bp_like_post_types[]"
+                                <label for="bp_like_post_type_<?php echo $post_type ?>">
+                                    <input type="checkbox" name="bp_like_post_types[]"
                                        value="<?php echo $post_type ?>"
-                                       <?php checked(true, in_array($post_type, bp_like_get_settings('bp_like_post_types'))) ?>>&nbsp; <?php echo $object->labels->singular_name ?><br>
+                                       id="bp_like_post_type_<?php echo $post_type ?>"
+                                       <?php checked(true, in_array($post_type, bp_like_get_settings('bp_like_post_types'))) ?>>&nbsp
+                                    <?php echo $object->labels->singular_name ?>
+                                </label><br>
                             <?php } ?>
                         </fieldset>
                     </td>
