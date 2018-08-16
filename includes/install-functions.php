@@ -106,6 +106,7 @@ function bp_like_install() {
     }
 
     $default_text_strings = bp_like_get_default_text_strings();
+    $text_strings         = array();
 
     if ( $current_settings['text_strings'] ) {
 

@@ -1,10 +1,10 @@
 === BuddyPress Like ===
-Contributors: darrenmeehan, cherbst
+Contributors: darrenmeehan, cherbst, sjregan, zipline
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAJLLEJDBHAWL
 Tags: buddypress, like, rate, thumbs, post, button, vote
 Requires at least: WordPress 3.8, BuddyPress 1.5
 Tested up to: WordPress 4.4, BuddyPress 2.4
-Stable tag: 0.3
+Stable tag: 0.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,11 +40,13 @@ Gives users the ability to 'like' content across your BuddyPress enabled site.
 2. Screenshot of settings available in admin settings
 
 == Changelog ==
+= 0.5.2 =
+- Fixes PHP notices on install and settings save
+
 = 0.4 =
 - Now supports liking blog posts
 - Also includes support for notifications
 - Added screenshots
-
 
 = 0.3 =
 - Improved privacy when liking in groups

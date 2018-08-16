@@ -5,7 +5,7 @@
   Plugin URI: http://darrenmeehan.me/
   Description: Adds the ability for users to like content throughout your BuddyPress site.
   Author: Darren Meehan, Christoph Herbst
-  Version: 0.5.1-konnektiv
+  Version: 0.5.2-konnektiv
   Author URI: http://darrenmeehan.me
   Text Domain: buddypress-like
 
