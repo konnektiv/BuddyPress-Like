@@ -701,7 +701,10 @@ function bp_like_activity_notifications_mark_read( $activity ) {
 
 	// also mark any notifications as read for the activity comments
 
-	$comments = BP_Activity_Activity::get_activity_comments( $activity->id, $activity->mptt_left, $activity->mptt_right, $spam );
+	if ( ! ( $comments = BP_Activity_Activity::get_activity_comments( $activity->id, $activity->mptt_left, $activity->mptt_right ) ) ) {
+		// no comments, so return
+		return;
+	}
 
 	foreach ( $comments as $comment ) {
 		bp_notifications_mark_notifications_by_item_id( bp_loggedin_user_id(), $comment->id, buddypress()->likes->id, null );
