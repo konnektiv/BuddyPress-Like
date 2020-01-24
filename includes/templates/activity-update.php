@@ -49,12 +49,15 @@ function bplike_activity_update_button() {
     $type = 'activity_update';
     $id = bp_get_activity_id();
 
-    if ( $post_type == 'reply' || $post_type == 'topic' ) {
-        $type = 'blog_post';
-        $id = $activity_obj->item_id;
-    } elseif ( $post_type ) {
-        $type = 'blog_post';
-        $id = $activity_obj->secondary_item_id;
+    if ( $post_type ) {
+	    $type = 'blog_post';
+
+	    // bbpress uses the secondary_item_id for the forum
+	    if ( $activity_obj->component == 'bbpress' ) {
+		    $id = $activity_obj->item_id;
+	    } else {
+		    $id = $activity_obj->secondary_item_id;
+        }
     }
 
     $vars = bp_like_get_template_vars( $id, $type );
